@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+// ===== WORKFLOW STACK =====
+// File:        poticas_v3.0.0.html → rename to index.html
+// Brand:       Zengine (on behalf of poticas.com)
+// Author:      Vincent Gonzalez | © 2026 Zengine™ | www.zengine.site
+// Version:     v3.0.0
+// Layout:      RESPONSIVE (mobile-first)
+// Browser:     MODERN-BROWSERS
+//
+// Boot Order:
+//   1. CSS vars + fonts
+//   2. GA4 G-QB3MRRGK3S fires immediately (analytics only, no consent required)
+//   3. Supabase CDN
+//   4. Static HTML renders
+//   5. CONFIG + supabaseClient init
+//   6. GDPR banner check → AdSense injected ONLY after accept
+//   7. Auth state listener
+//   8. Scroll reveal, easter egg inits
+//   9. loadPosts() + loadFeaturedRecipes() fire
+//
+// Section Map:
+//   [000] HEAD — meta, OG, schema, GA4, fonts, AdSense placeholder, CSS
+//   [001] GDPR BANNER
+//   [002] HEADER
+//   [003] MOBILE DRAWER
+//   [004] AUTH MODAL
+//   [005] HERO
+//   [006] FEATURED RECIPES — painting bg, recipe submission form, top recipe cards
+//   [007] COMMUNITY FEED — posts, composer (photo upload skeleton), load more
+//   [008] AFFILIATE SHOP — "Recommended by Poticas.com" + "Baker's Pantry"
+//   [009] FOOTER
+//   [010] EASTER EGG — Anne Kapel
+//   [011] PAINTING EASTER EGG — the community painting, hidden trigger
+//   [012] RECIPE SUBMIT MODAL
+//   [013] SCRIPT
+//
+// REQUIRED SUPABASE SQL (run once):
+//   -- existing: posts, post_likes, notify_list (from v2.0.0 — skip if already run)
+//
+//   -- moderation flag (add to existing posts table):
+//   alter table posts add column if not exists flagged boolean default false;
+//
+//   -- recipes table (NEW):
+//   create table if not exists recipes (
+//     id           bigint generated always as identity primary key,
+//     created_at   timestamptz default now() not null,
+//     title        text not null,
+//     author_name  text not null,
+//     origin       text,
+//     description  text,
+//     ingredients  text not null,
+//     instructions text not null,
+//     user_id      uuid references auth.users(id) on delete set null,
+//     likes        integer default 0,
+//     featured     boolean default false
+//   );
+//   alter table recipes enable row level security;
+//   create policy "Public read recipes"  on recipes for select using (true);
+//   create policy "Auth insert recipes"  on recipes for insert with check (auth.uid() is not null);
+//
+//   -- recipe_likes table (NEW):
+//   create table if not exists recipe_likes (
+//     id        bigint generated always as identity primary key,
+//     recipe_id bigint references recipes(id) on delete cascade not null,
+//     user_id   uuid  references auth.users(id) on delete cascade not null,
+//     unique(recipe_id, user_id)
+//   );
+//   alter table recipe_likes enable row level security;
+//   create policy "Public read recipe likes" on recipe_likes for select using (true);
+//   create policy "Auth insert recipe likes" on recipe_likes for insert with check (auth.uid() = user_id);
+//   create policy "Auth delete recipe likes" on recipe_likes for delete using (auth.uid() = user_id);
+//
+//   -- Supabase Storage bucket for post photos (create in dashboard):
+//   -- Storage → New bucket → Name: post-images → Public: YES
+//   -- Add policy: Allow authenticated uploads
+//   --   insert policy: bucket_id = 'post-images' AND auth.uid() is not null
+//
+//   -- indexes:
+//   create index if not exists idx_posts_created_at   on posts(created_at desc);
+//   create index if not exists idx_likes_post_id      on post_likes(post_id);
+//   create index if not exists idx_recipes_likes      on recipes(likes desc);
+//   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.0.0:
+//   - GA4 ID locked: G-QB3MRRGK3S (both script tags)
+//   - Schema.org JSON-LD preserved from v2.0.0
+//   - AdSense: loads ONLY post-GDPR accept (full EU/global compliance)
+//   - GA4: fires immediately (analytics — no consent required under ePrivacy for analytics-only)
+//   - FTC affiliate disclosure banner on shop section
+//   - Community painting (image 2) wired as featured section hero background
+//   - Painting also available as hidden easter egg (click the ornament in featured section 3x)
+//   - Featured Recipes section: recipe submission form modal → recipes table
+//     Top Baker sidebar driven by most-liked recipe posts
+//   - Shop section: "Coming Soon" removed entirely
+//     → "Order Potica" subsection (Goldbelly affiliate placeholder)
+//     → "Baker's Pantry" subsection (affiliate product grid, Amazon/King Arthur style)
+//   - Post composer: photo upload UI wired (Supabase Storage bucket: post-images)
+//   - loadPosts: filters out flagged=true rows
+//   - Baker profile link on post author name → /profile.html?id=UUID
+//   - Comment thread expand skeleton (fires openComments(postId))
+//   - About Potica link in nav → /about-potica.html
+//
+// ROLLBACK: v2.0.0 — no recipes table, no affiliate shop, no painting, POTICAS_GA4_ID placeholder
+//
+// DEV_MODE: false
+// ===========================
+
+/* ===================================================
+   EASTER EGG 1 — DO NOT REMOVE
+   "Dedicated in loving memory of: Anne Kapel"
+   Triggered by clicking the spiral logo 5 times.
+   ===================================================
+   EASTER EGG 2 — DO NOT REMOVE
+   The Community Painting — hidden in Featured section.
+   Triggered by clicking the section ornament 3 times.
+   ==================================================*/
+-->
+<head>
+<!-- [000] HEAD -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Poticas.com — Your grandmother's recipe deserves to live forever. The world's finest rolled pastry community. Share recipes, discover varieties, and connect with bakers worldwide." />
+<meta name="keywords" content="potica, poticas, slovenian potica, walnut potica, potica recipe, rolled pastry, slovenian dessert, potica community, traditional potica, how to make potica" />
+<title>Poticas.com — Your Grandmother's Recipe Lives Here</title>
+<link rel="canonical" href="https://poticas.com" />
+
+<!-- OG -->
+<meta property="og:title"       content="Poticas.com — Your Grandmother's Recipe Lives Here" />
+<meta property="og:description" content="Your grandmother's recipe deserves to live forever. The world's finest rolled pastry community." />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://poticas.com" />
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:title"       content="Poticas.com" />
+<meta name="twitter:description" content="Your grandmother's recipe deserves to live forever." />
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Poticas.com",
+  "url": "https://poticas.com",
+  "description": "The world's first community dedicated to potica, the traditional Central European rolled pastry.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://poticas.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌰</text></svg>" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+
+<!-- GA4 — fires immediately; analytics only, no PII, ePrivacy compliant without consent -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QB3MRRGK3S"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-QB3MRRGK3S', { anonymize_ip: true });
+</script>
+
+<!-- AdSense — injected dynamically after GDPR consent; see loadAdSense() -->
+<!-- Publisher: ca-pub-8826956454892311 -->
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --clr-bg:         #f5efe4;
+  --clr-bg-alt:     #ede5d4;
+  --clr-surface:    #fff8ee;
+  --clr-walnut:     #3b2314;
+  --clr-walnut-mid: #6b3d24;
+  --clr-caramel:    #b86b2e;
+  --clr-gold:       #c9922a;
+  --clr-cream:      #fdf6e9;
+  --clr-ink:        #2a1a0e;
+  --clr-ink-muted:  #7a5c44;
+  --clr-divider:    #d4c4a8;
+  --clr-like:       #c0392b;
+  --clr-overlay:    rgba(42,26,14,0.72);
+  --clr-success:    #2d7a3a;
+  --clr-error:      #b83030;
+  --ff-display:     'Playfair Display', Georgia, serif;
+  --ff-body:        'Lora', 'Times New Roman', serif;
+  --ff-accent:      'Cormorant Garamond', Georgia, serif;
+  --radius-sm:  4px;
+  --radius-md:  10px;
+  --radius-lg:  20px;
+  --shadow-card:  0 2px 16px rgba(59,35,20,0.10);
+  --shadow-hover: 0 6px 32px rgba(59,35,20,0.18);
+  --transition:   0.28s cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{background:var(--clr-bg);color:var(--clr-ink);font-family:var(--ff-body);line-height:1.7;min-height:100vh;overflow-x:hidden;}
+body.modal-open,body.nav-open{overflow:hidden;}
+a{color:var(--clr-caramel);text-decoration:none;transition:color var(--transition);}
+a:hover{color:var(--clr-walnut);}
+img{max-width:100%;display:block;}
+.container{max-width:1100px;margin:0 auto;padding:0 24px;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+
+/* TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+
+/* ===== [001] GDPR BANNER ===== */
+.gdpr-banner{position:fixed;bottom:0;left:0;right:0;z-index:8000;background:var(--clr-walnut);border-top:2px solid var(--clr-gold);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;box-shadow:0 -4px 24px rgba(42,26,14,0.3);transform:translateY(0);transition:transform 0.4s ease;}
+.gdpr-banner.hidden{transform:translateY(110%);}
+.gdpr-text{font-family:var(--ff-accent);font-size:0.88rem;color:rgba(253,246,233,0.85);line-height:1.6;flex:1;min-width:200px;}
+.gdpr-text a{color:var(--clr-gold);text-decoration:underline;}
+.gdpr-text a:hover{color:var(--clr-cream);}
+.gdpr-actions{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;}
+.gdpr-btn-accept{background:var(--clr-gold);color:var(--clr-walnut);border:none;border-radius:999px;padding:8px 22px;font-family:var(--ff-accent);font-size:0.9rem;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:background var(--transition);}
+.gdpr-btn-accept:hover{background:var(--clr-cream);}
+.gdpr-btn-decline{background:none;border:1px solid rgba(253,246,233,0.3);border-radius:999px;padding:8px 18px;font-family:var(--ff-accent);font-size:0.88rem;color:rgba(253,246,233,0.6);cursor:pointer;transition:border-color var(--transition),color var(--transition);}
+.gdpr-btn-decline:hover{border-color:rgba(253,246,233,0.6);color:rgba(253,246,233,0.9);}
+
+/* ===== [002] HEADER ===== */
+.site-header{position:sticky;top:0;z-index:200;background:rgba(245,239,228,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1.5px solid var(--clr-divider);padding:14px 0;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo-wrap{display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none;-webkit-user-select:none;flex-shrink:0;}
+.logo-svg{width:52px;height:36px;flex-shrink:0;transition:transform 0.18s ease;}
+.logo-wrap:hover .logo-svg{transform:rotate(-8deg) scale(1.08);}
+.logo-text{font-family:var(--ff-display);font-size:1.75rem;font-weight:900;letter-spacing:-0.02em;color:var(--clr-walnut);line-height:1;white-space:nowrap;}
+.logo-text span{color:var(--clr-caramel);}
+.site-nav{display:flex;align-items:center;gap:6px;}
+.nav-link{font-family:var(--ff-accent);font-size:1.05rem;font-weight:600;letter-spacing:0.04em;color:var(--clr-walnut-mid);padding:6px 14px;border-radius:var(--radius-sm);transition:background var(--transition),color var(--transition);}
+.nav-link:hover{background:var(--clr-walnut);color:var(--clr-cream);}
+.nav-cta{background:var(--clr-caramel);color:var(--clr-cream) !important;/* declared: CTA pill only */border-radius:999px;padding:7px 20px;font-weight:600;letter-spacing:0.06em;transition:background var(--transition),transform var(--transition);}
+.nav-cta:hover{background:var(--clr-walnut);transform:translateY(-1px);}
+.auth-btn{display:flex;align-items:center;gap:8px;background:none;border:1.5px solid var(--clr-divider);border-radius:999px;padding:6px 16px;font-family:var(--ff-accent);font-size:0.92rem;font-weight:600;color:var(--clr-walnut-mid);cursor:pointer;transition:border-color var(--transition),color var(--transition);white-space:nowrap;}
+.auth-btn:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.auth-btn.signed-in{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.auth-avatar{width:24px;height:24px;border-radius:50%;background:var(--clr-caramel);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--clr-cream);font-family:var(--ff-display);font-style:italic;overflow:hidden;flex-shrink:0;}
+.auth-avatar img{width:100%;height:100%;object-fit:cover;}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:1.5px solid var(--clr-divider);border-radius:var(--radius-sm);cursor:pointer;transition:border-color var(--transition);flex-shrink:0;}
+.hamburger:hover{border-color:var(--clr-caramel);}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--clr-walnut);border-radius:2px;transition:transform 0.25s ease,opacity 0.25s ease;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* ===== [003] MOBILE DRAWER ===== */
+.nav-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(42,26,14,0.55);z-index:150;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+.nav-drawer-overlay.open{display:block;animation:fadeIn 0.22s ease both;}
+.nav-drawer{position:fixed;top:0;right:0;height:100%;width:min(320px,85vw);background:var(--clr-cream);z-index:160;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 48px rgba(42,26,14,0.22);}
+.nav-drawer.open{transform:translateX(0);}
+.nav-drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--clr-divider);}
+.nav-drawer-logo{font-family:var(--ff-display);font-size:1.3rem;font-weight:900;color:var(--clr-walnut);}
+.nav-drawer-logo span{color:var(--clr-caramel);}
+.nav-drawer-close{background:none;border:none;font-size:1.4rem;color:var(--clr-walnut-mid);cursor:pointer;padding:4px 8px;transition:color var(--transition);}
+.nav-drawer-close:hover{color:var(--clr-caramel);}
+.nav-drawer-links{flex:1;padding:24px;display:flex;flex-direction:column;gap:4px;}
+.drawer-link{display:block;font-family:var(--ff-accent);font-size:1.25rem;font-weight:600;color:var(--clr-walnut);padding:14px 16px;border-radius:var(--radius-md);letter-spacing:0.04em;transition:background var(--transition),color var(--transition);}
+.drawer-link:hover{background:var(--clr-bg-alt);color:var(--clr-caramel);}
+.drawer-link-cta{display:block;background:var(--clr-caramel);color:var(--clr-cream) !important;/* declared: CTA only */font-family:var(--ff-accent);font-size:1.1rem;font-weight:700;letter-spacing:0.08em;text-align:center;padding:14px 16px;border-radius:999px;margin-top:12px;transition:background var(--transition);}
+.drawer-link-cta:hover{background:var(--clr-walnut);}
+.nav-drawer-footer{padding:20px 24px;border-top:1px solid var(--clr-divider);font-family:var(--ff-accent);font-size:0.8rem;color:var(--clr-ink-muted);font-style:italic;}
+
+/* ===== [004] AUTH MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:var(--clr-overlay);z-index:7000;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.modal-overlay.active{display:flex;animation:fadeIn 0.3s ease both;}
+.auth-modal{background:var(--clr-cream);border-radius:var(--radius-lg);padding:40px 36px;max-width:460px;width:100%;position:relative;animation:riseUp 0.4s cubic-bezier(0.34,1.56,0.64,1) both;box-shadow:0 24px 80px rgba(42,26,14,0.45);border:1px solid var(--clr-divider);}
+.auth-modal-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.3rem;color:var(--clr-ink-muted);cursor:pointer;transition:color var(--transition);}
+.auth-modal-close:hover{color:var(--clr-caramel);}
+.auth-modal h2{font-family:var(--ff-display);font-size:1.6rem;font-weight:700;color:var(--clr-walnut);margin-bottom:6px;line-height:1.2;}
+.auth-modal-sub{font-family:var(--ff-accent);font-style:italic;color:var(--clr-ink-muted);font-size:0.95rem;margin-bottom:28px;}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;background:#fff;border:1.5px solid var(--clr-divider);border-radius:999px;padding:12px 20px;font-family:var(--ff-accent);font-size:1rem;font-weight:600;color:var(--clr-ink);cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition);letter-spacing:0.02em;margin-bottom:20px;}
+.btn-google:hover{border-color:var(--clr-caramel);box-shadow:0 2px 12px rgba(59,35,20,0.12);}
+.auth-divider{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--clr-divider);}
+.auth-divider span{font-family:var(--ff-accent);font-size:0.82rem;color:var(--clr-ink-muted);letter-spacing:0.1em;text-transform:uppercase;}
+.auth-field{margin-bottom:14px;}
+.auth-field label{display:block;font-family:var(--ff-accent);font-size:0.85rem;color:var(--clr-walnut-mid);margin-bottom:5px;letter-spacing:0.04em;}
+.auth-input{width:100%;background:var(--clr-bg);border:1.5px solid var(--clr-divider);border-radius:var(--radius-md);padding:11px 16px;font-family:var(--ff-body);font-size:0.95rem;color:var(--clr-ink);transition:border-color var(--transition);}
+.auth-input:focus{outline:none;border-color:var(--clr-caramel);}
+.auth-input::placeholder{color:var(--clr-ink-muted);}
+.auth-input.error{border-color:var(--clr-error);}
+.btn-auth-submit{width:100%;background:var(--clr-walnut);color:var(--clr-cream);border:none;border-radius:999px;padding:12px 20px;font-family:var(--ff-accent);font-size:1rem;font-weight:600;letter-spacing:0.06em;cursor:pointer;transition:background var(--transition);margin-bottom:14px;}
+.btn-auth-submit:hover{background:var(--clr-caramel);}
+.btn-auth-submit:disabled{opacity:0.55;cursor:not-allowed;}
+.auth-toggle{font-family:var(--ff-accent);font-size:0.88rem;color:var(--clr-ink-muted);text-align:center;}
+.auth-toggle a{color:var(--clr-caramel);cursor:pointer;}
+.auth-msg{font-family:var(--ff-accent);font-size:0.88rem;padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:14px;display:none;}
+.auth-msg.error{background:#fdf0f0;color:var(--clr-error);border:1px solid rgba(184,48,48,0.2);}
+.auth-msg.success{background:#f0fdf4;color:var(--clr-success);border:1px solid rgba(45,122,58,0.2);}
+.auth-msg.visible{display:block;}
+
+/* ===== HERO ===== */
+.hero{position:relative;padding:96px 0 80px;text-align:center;overflow:hidden;}
+.hero-bg-spiral{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:min(700px,100vw);height:min(700px,100vw);opacity:0.045;pointer-events:none;}
+.hero-eyebrow{font-family:var(--ff-accent);font-size:1rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--clr-caramel);margin-bottom:18px;animation:fadeUp 0.8s ease both;}
+.hero-title{font-family:var(--ff-display);font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;color:var(--clr-walnut);line-height:1.08;letter-spacing:-0.025em;margin-bottom:24px;animation:fadeUp 0.85s 0.1s ease both;}
+.hero-title em{font-style:italic;color:var(--clr-caramel);}
+.hero-subtitle{font-family:var(--ff-accent);font-size:clamp(1.1rem,2.5vw,1.45rem);font-weight:300;font-style:italic;color:var(--clr-ink-muted);max-width:560px;margin:0 auto 40px;animation:fadeUp 0.9s 0.2s ease both;}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;animation:fadeUp 0.95s 0.3s ease both;}
+.btn-primary{display:inline-block;background:var(--clr-walnut);color:var(--clr-cream);font-family:var(--ff-accent);font-size:1.05rem;font-weight:600;letter-spacing:0.08em;padding:14px 36px;border-radius:999px;border:none;cursor:pointer;transition:background var(--transition),transform var(--transition),box-shadow var(--transition);box-shadow:0 4px 18px rgba(59,35,20,0.22);}
+.btn-primary:hover{background:var(--clr-caramel);color:var(--clr-cream);transform:translateY(-2px);box-shadow:0 8px 28px rgba(59,35,20,0.28);}
+.btn-secondary{display:inline-block;background:transparent;color:var(--clr-walnut-mid);font-family:var(--ff-accent);font-size:1.05rem;font-weight:600;letter-spacing:0.06em;padding:13px 32px;border-radius:999px;border:1.5px solid var(--clr-divider);cursor:pointer;transition:background var(--transition),border-color var(--transition),color var(--transition);}
+.btn-secondary:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.ornament{display:flex;align-items:center;gap:16px;margin:16px 0;}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:var(--clr-divider);}
+.ornament-inner{font-family:var(--ff-display);font-style:italic;color:var(--clr-gold);font-size:1.2rem;letter-spacing:0.12em;cursor:default;}
+.section-label{font-family:var(--ff-accent);font-size:0.82rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--clr-caramel);margin-bottom:8px;}
+.section-title{font-family:var(--ff-display);font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;color:var(--clr-walnut);margin-bottom:8px;line-height:1.2;}
+
+/* ===== [006] FEATURED RECIPES ===== */
+.featured-section{
+  position:relative;
+  padding:80px 0;
+  overflow:hidden;
+  background:var(--clr-walnut);
+}
+
+/* The painting lives here as a background */
+.featured-painting-bg{
+  position:absolute;
+  inset:0;
+  background-image: url('https://i.imgur.com/placeholder.jpg'); /* REPLACE with hosted painting URL */
+  background-size:cover;
+  background-position:center 30%;
+  opacity:0.18;
+  transition:opacity 1.2s ease;
+  pointer-events:none;
+}
+/* Gradient overlay to keep text readable over painting */
+.featured-painting-bg::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(59,35,20,0.55) 0%,
+    rgba(59,35,20,0.35) 40%,
+    rgba(59,35,20,0.72) 100%
+  );
+}
+
+.featured-section .section-label{color:var(--clr-gold);}
+.featured-section .section-title{color:var(--clr-cream);}
+.featured-section .ornament-inner{color:var(--clr-gold);}
+.featured-section .ornament::before,.featured-section .ornament::after{background:rgba(255,255,255,0.14);}
+
+.featured-intro{
+  font-family:var(--ff-accent);
+  font-size:1.05rem;
+  font-style:italic;
+  color:rgba(253,246,233,0.75);
+  max-width:580px;
+  margin-bottom:40px;
+  position:relative;
+  z-index:1;
+}
+
+.featured-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:22px;
+  margin-bottom:40px;
+  position:relative;
+  z-index:1;
+}
+
+.recipe-card{
+  background:rgba(253,246,233,0.09);
+  border:1.5px solid rgba(253,246,233,0.16);
+  border-radius:var(--radius-lg);
+  padding:26px 22px;
+  transition:background var(--transition),border-color var(--transition),transform var(--transition);
+  position:relative;
+}
+.recipe-card:hover{
+  background:rgba(253,246,233,0.14);
+  border-color:rgba(201,146,42,0.55);
+  transform:translateY(-3px);
+}
+.recipe-card-title{
+  font-family:var(--ff-display);
+  font-size:1.15rem;
+  font-weight:700;
+  color:var(--clr-cream);
+  margin-bottom:4px;
+  line-height:1.3;
+}
+.recipe-card-origin{
+  font-family:var(--ff-accent);
+  font-size:0.82rem;
+  color:var(--clr-gold);
+  letter-spacing:0.08em;
+  margin-bottom:10px;
+}
+.recipe-card-desc{
+  font-family:var(--ff-accent);
+  font-size:0.9rem;
+  color:rgba(253,246,233,0.7);
+  font-style:italic;
+  line-height:1.6;
+  margin-bottom:16px;
+}
+.recipe-card-author{
+  font-family:var(--ff-body);
+  font-size:0.82rem;
+  color:rgba(253,246,233,0.5);
+  margin-bottom:14px;
+}
+.recipe-card-footer{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.recipe-like-btn{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:none;cursor:pointer;
+  font-family:var(--ff-accent);font-size:0.88rem;
+  color:rgba(253,246,233,0.55);
+  transition:color var(--transition);
+}
+.recipe-like-btn:hover{color:var(--clr-like);}
+.recipe-like-btn.liked{color:var(--clr-like);}
+.recipe-like-btn .heart{display:inline-block;transition:transform 0.15s ease;}
+.recipe-like-btn.liked .heart{transform:scale(1.3);}
+.recipe-view-btn{
+  font-family:var(--ff-accent);font-size:0.88rem;
+  color:var(--clr-gold);cursor:pointer;
+  background:none;border:none;
+  letter-spacing:0.04em;
+  transition:color var(--transition);
+}
+.recipe-view-btn:hover{color:var(--clr-cream);}
+
+/* No recipes yet placeholder */
+.recipe-empty{
+  font-family:var(--ff-accent);font-style:italic;
+  color:rgba(253,246,233,0.5);font-size:0.95rem;
+  text-align:center;padding:32px 0;
+  position:relative;z-index:1;
+}
+
+/* Submit recipe CTA */
+.featured-cta{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:1;
+}
+.btn-submit-recipe{
+  background:var(--clr-gold);
+  color:var(--clr-walnut);
+  border:none;border-radius:999px;
+  padding:12px 30px;
+  font-family:var(--ff-accent);font-size:1rem;font-weight:700;
+  letter-spacing:0.06em;cursor:pointer;
+  transition:background var(--transition),transform var(--transition);
+}
+.btn-submit-recipe:hover{background:var(--clr-cream);transform:translateY(-1px);}
+.featured-cta-note{
+  font-family:var(--ff-accent);font-style:italic;
+  font-size:0.88rem;color:rgba(253,246,233,0.5);
+}
+
+/* ===== [007] COMMUNITY FEED ===== */
+.feed-section{padding:72px 0;background:var(--clr-bg-alt);position:relative;}
+.feed-layout{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start;}
+@media(max-width:820px){.feed-layout{grid-template-columns:1fr;}.feed-sidebar{display:none;}}
+.feed-loading{font-family:var(--ff-accent);font-style:italic;color:var(--clr-ink-muted);font-size:0.95rem;padding:24px 0;text-align:center;letter-spacing:0.04em;}
+.feed-error{font-family:var(--ff-accent);color:var(--clr-caramel);font-size:0.9rem;padding:16px 20px;border:1px solid var(--clr-divider);border-radius:var(--radius-md);background:var(--clr-surface);margin-bottom:20px;}
+
+/* COMPOSER */
+.composer-wrap{position:relative;margin-bottom:28px;}
+.composer-lock-overlay{position:absolute;inset:0;background:rgba(253,246,233,0.88);border-radius:var(--radius-lg);border:1.5px solid var(--clr-divider);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;backdrop-filter:blur(2px);transition:opacity var(--transition);}
+.composer-lock-overlay.hidden{display:none;}
+.lock-icon{font-size:1.8rem;}
+.lock-msg{font-family:var(--ff-accent);font-style:italic;color:var(--clr-ink-muted);font-size:1rem;text-align:center;line-height:1.5;}
+.btn-join-overlay{background:var(--clr-caramel);color:var(--clr-cream);border:none;border-radius:999px;padding:10px 28px;font-family:var(--ff-accent);font-size:0.95rem;font-weight:600;letter-spacing:0.06em;cursor:pointer;transition:background var(--transition),transform var(--transition);}
+.btn-join-overlay:hover{background:var(--clr-walnut);transform:translateY(-1px);}
+.post-composer{background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);}
+.composer-top{display:flex;gap:12px;margin-bottom:14px;}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--clr-walnut);display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:1rem;color:var(--clr-cream);flex-shrink:0;font-style:italic;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.composer-input{flex:1;background:var(--clr-bg);border:1.5px solid var(--clr-divider);border-radius:var(--radius-md);padding:12px 16px;font-family:var(--ff-body);font-size:0.95rem;color:var(--clr-ink);resize:vertical;min-height:80px;transition:border-color var(--transition);width:100%;}
+.composer-input:focus{outline:none;border-color:var(--clr-caramel);}
+.composer-input::placeholder{color:var(--clr-ink-muted);}
+.composer-actions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.composer-tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.tag-btn{background:none;border:1px solid var(--clr-divider);border-radius:999px;padding:4px 12px;font-family:var(--ff-accent);font-size:0.82rem;color:var(--clr-ink-muted);cursor:pointer;transition:border-color var(--transition),color var(--transition),background var(--transition);}
+.tag-btn:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.tag-btn.active{background:var(--clr-caramel);border-color:var(--clr-caramel);color:var(--clr-cream);}
+
+/* Photo upload button */
+.photo-upload-btn{background:none;border:1px dashed var(--clr-divider);border-radius:999px;padding:4px 12px;font-family:var(--ff-accent);font-size:0.82rem;color:var(--clr-ink-muted);cursor:pointer;transition:border-color var(--transition),color var(--transition);display:flex;align-items:center;gap:5px;}
+.photo-upload-btn:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.photo-preview{display:none;margin-top:8px;position:relative;width:fit-content;}
+.photo-preview img{max-height:120px;border-radius:var(--radius-md);border:1px solid var(--clr-divider);}
+.photo-preview-remove{position:absolute;top:-6px;right:-6px;background:var(--clr-walnut);color:var(--clr-cream);border:none;border-radius:50%;width:20px;height:20px;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#photoFileInput{display:none;}
+
+.btn-post{background:var(--clr-caramel);color:var(--clr-cream);border:none;border-radius:999px;padding:8px 24px;font-family:var(--ff-accent);font-size:0.95rem;font-weight:600;letter-spacing:0.06em;cursor:pointer;transition:background var(--transition),transform var(--transition);}
+.btn-post:hover{background:var(--clr-walnut);transform:translateY(-1px);}
+.btn-post:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+
+/* POSTS */
+.post-card{background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-card);transition:box-shadow var(--transition),transform var(--transition);}
+.post-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);}
+.post-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.post-meta{flex:1;}
+.post-author-link{font-family:var(--ff-display);font-size:1rem;font-weight:700;color:var(--clr-walnut);cursor:pointer;background:none;border:none;padding:0;transition:color var(--transition);}
+.post-author-link:hover{color:var(--clr-caramel);}
+.post-time{font-family:var(--ff-accent);font-size:0.82rem;color:var(--clr-ink-muted);letter-spacing:0.04em;}
+.post-tag{display:inline-block;background:var(--clr-bg-alt);border:1px solid var(--clr-divider);border-radius:999px;padding:2px 10px;font-family:var(--ff-accent);font-size:0.78rem;color:var(--clr-caramel);letter-spacing:0.06em;margin-left:6px;}
+.post-body{font-size:0.97rem;color:var(--clr-ink);margin-bottom:16px;line-height:1.75;}
+.post-image{width:100%;max-height:320px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:16px;border:1px solid var(--clr-divider);}
+.post-recipe-block{background:var(--clr-bg);border-left:3px solid var(--clr-gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 18px;margin-bottom:16px;}
+.post-recipe-block h4{font-family:var(--ff-display);font-size:0.92rem;font-weight:700;color:var(--clr-walnut);margin-bottom:8px;}
+.post-recipe-block ul{list-style:none;font-family:var(--ff-accent);font-size:0.88rem;color:var(--clr-ink-muted);line-height:1.9;}
+.post-recipe-block ul li::before{content:'◆  ';color:var(--clr-gold);font-size:0.6rem;}
+.post-footer{display:flex;align-items:center;gap:20px;padding-top:14px;border-top:1px solid var(--clr-divider);}
+.like-btn{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:var(--ff-accent);font-size:0.9rem;color:var(--clr-ink-muted);padding:4px 0;transition:color var(--transition);}
+.like-btn:hover{color:var(--clr-like);}
+.like-btn.liked{color:var(--clr-like);}
+.like-btn .heart{font-size:1rem;display:inline-block;transition:transform 0.15s cubic-bezier(0.36,0.07,0.19,0.97);}
+.like-btn.liked .heart{transform:scale(1.3);}
+.comment-btn{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:var(--ff-accent);font-size:0.9rem;color:var(--clr-ink-muted);transition:color var(--transition);}
+.comment-btn:hover{color:var(--clr-caramel);}
+.load-more-wrap{text-align:center;margin-top:8px;margin-bottom:16px;}
+.btn-load-more{background:none;border:1.5px solid var(--clr-divider);border-radius:999px;padding:10px 32px;font-family:var(--ff-accent);font-size:0.95rem;font-weight:600;color:var(--clr-walnut-mid);cursor:pointer;transition:border-color var(--transition),color var(--transition);letter-spacing:0.04em;}
+.btn-load-more:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.btn-load-more:disabled{opacity:0.45;cursor:not-allowed;}
+.btn-load-more.hidden{display:none;}
+
+/* SIDEBAR */
+.sidebar-card{background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:var(--radius-lg);padding:22px;margin-bottom:20px;box-shadow:var(--shadow-card);}
+.sidebar-card h3{font-family:var(--ff-display);font-size:1.05rem;font-weight:700;color:var(--clr-walnut);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--clr-divider);}
+.trending-tag{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--clr-bg-alt);font-family:var(--ff-accent);font-size:0.9rem;color:var(--clr-walnut-mid);}
+.trending-tag:last-child{border-bottom:none;}
+.trending-tag .count{color:var(--clr-caramel);font-weight:600;}
+.top-baker-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--clr-bg-alt);}
+.top-baker-row:last-child{border-bottom:none;}
+.baker-name{font-family:var(--ff-body);font-size:0.9rem;color:var(--clr-walnut);font-weight:600;flex:1;}
+.baker-badge{font-family:var(--ff-accent);font-size:0.75rem;color:var(--clr-gold);letter-spacing:0.06em;}
+.baker-score{font-family:var(--ff-accent);font-size:0.78rem;color:var(--clr-caramel);}
+
+/* ===== [008] AFFILIATE SHOP ===== */
+.shop-section{padding:80px 0;background:var(--clr-walnut);position:relative;overflow:hidden;}
+.shop-section::before{content:'';position:absolute;top:-60px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(201,146,42,0.15) 0%,transparent 70%);pointer-events:none;}
+.shop-section .section-label{color:var(--clr-gold);}
+.shop-section .section-title{color:var(--clr-cream);}
+.shop-section .ornament-inner{color:var(--clr-gold);}
+.shop-section .ornament::before,.shop-section .ornament::after{background:rgba(255,255,255,0.12);}
+
+/* FTC / Affiliate disclosure */
+.affiliate-disclosure{
+  font-family:var(--ff-accent);
+  font-size:0.80rem;
+  color:rgba(253,246,233,0.45);
+  font-style:italic;
+  margin-bottom:32px;
+  padding:10px 16px;
+  border:1px solid rgba(253,246,233,0.12);
+  border-radius:var(--radius-sm);
+  line-height:1.6;
+  position:relative;
+  z-index:1;
+}
+.affiliate-disclosure a{color:rgba(253,246,233,0.55);text-decoration:underline;}
+
+.shop-subsection-title{
+  font-family:var(--ff-display);
+  font-size:1.3rem;
+  font-weight:700;
+  color:var(--clr-cream);
+  margin-bottom:6px;
+  margin-top:40px;
+  position:relative;
+  z-index:1;
+}
+.shop-subsection-sub{
+  font-family:var(--ff-accent);
+  font-style:italic;
+  color:rgba(253,246,233,0.6);
+  font-size:0.95rem;
+  margin-bottom:24px;
+  position:relative;
+  z-index:1;
+}
+
+/* Order Potica — Goldbelly style cards */
+.order-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:18px;
+  margin-bottom:40px;
+  position:relative;
+  z-index:1;
+}
+.order-card{
+  background:rgba(255,248,238,0.07);
+  border:1.5px solid rgba(255,248,238,0.14);
+  border-radius:var(--radius-lg);
+  padding:24px 20px;
+  transition:background var(--transition),border-color var(--transition),transform var(--transition);
+}
+.order-card:hover{background:rgba(255,248,238,0.12);border-color:rgba(201,146,42,0.5);transform:translateY(-3px);}
+.order-icon{font-size:2.2rem;margin-bottom:12px;display:block;}
+.order-name{font-family:var(--ff-display);font-size:1.05rem;font-weight:700;color:var(--clr-cream);margin-bottom:4px;}
+.order-source{font-family:var(--ff-accent);font-size:0.78rem;color:var(--clr-gold);letter-spacing:0.1em;margin-bottom:8px;}
+.order-desc{font-family:var(--ff-accent);font-size:0.85rem;color:rgba(253,246,233,0.65);font-style:italic;line-height:1.5;margin-bottom:16px;}
+.btn-order-link{
+  display:inline-block;
+  background:var(--clr-gold);color:var(--clr-walnut);
+  border:none;border-radius:999px;
+  padding:8px 20px;
+  font-family:var(--ff-accent);font-size:0.88rem;font-weight:700;letter-spacing:0.05em;
+  cursor:pointer;text-decoration:none;
+  transition:background var(--transition),transform var(--transition);
+}
+.btn-order-link:hover{background:var(--clr-cream);transform:translateY(-1px);color:var(--clr-walnut);}
+
+/* Baker's Pantry — ingredient/tool affiliate grid */
+.pantry-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:16px;
+  position:relative;
+  z-index:1;
+  margin-bottom:32px;
+}
+.pantry-card{
+  background:rgba(255,248,238,0.06);
+  border:1px solid rgba(255,248,238,0.12);
+  border-radius:var(--radius-md);
+  padding:18px 16px;
+  text-align:center;
+  transition:background var(--transition),border-color var(--transition),transform var(--transition);
+}
+.pantry-card:hover{background:rgba(255,248,238,0.11);border-color:rgba(201,146,42,0.4);transform:translateY(-2px);}
+.pantry-icon{font-size:1.8rem;margin-bottom:8px;display:block;}
+.pantry-name{font-family:var(--ff-accent);font-size:0.9rem;font-weight:600;color:var(--clr-cream);margin-bottom:4px;letter-spacing:0.03em;}
+.pantry-brand{font-family:var(--ff-accent);font-size:0.75rem;color:var(--clr-gold);margin-bottom:10px;letter-spacing:0.08em;}
+.btn-pantry-link{
+  display:inline-block;
+  background:none;
+  border:1px solid rgba(201,146,42,0.5);
+  border-radius:999px;
+  padding:5px 14px;
+  font-family:var(--ff-accent);font-size:0.78rem;color:var(--clr-gold);
+  text-decoration:none;
+  cursor:pointer;
+  transition:background var(--transition),color var(--transition),border-color var(--transition);
+}
+.btn-pantry-link:hover{background:var(--clr-gold);color:var(--clr-walnut);border-color:var(--clr-gold);}
+
+/* Notify list */
+.shop-notify-wrap{text-align:center;margin-top:48px;position:relative;z-index:1;}
+.shop-notify-form{display:flex;align-items:center;gap:12px;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+.notify-input{flex:1;min-width:200px;background:rgba(255,248,238,0.1);border:1.5px solid rgba(255,248,238,0.2);border-radius:999px;padding:12px 22px;font-family:var(--ff-accent);font-size:0.95rem;color:var(--clr-cream);transition:border-color var(--transition);}
+.notify-input:focus{outline:none;border-color:var(--clr-gold);}
+.notify-input::placeholder{color:rgba(253,246,233,0.45);}
+.btn-notify{background:var(--clr-gold);color:var(--clr-walnut);border:none;border-radius:999px;padding:12px 28px;font-family:var(--ff-accent);font-size:0.95rem;font-weight:700;letter-spacing:0.06em;cursor:pointer;transition:background var(--transition),transform var(--transition);white-space:nowrap;}
+.btn-notify:hover{background:var(--clr-cream);transform:translateY(-1px);}
+.btn-notify:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+.notify-success{display:none;font-family:var(--ff-accent);font-style:italic;color:var(--clr-gold);font-size:1rem;margin-top:12px;}
+
+/* ===== [009] FOOTER ===== */
+.site-footer{background:var(--clr-walnut);border-top:1px solid rgba(255,255,255,0.07);padding:48px 0 24px;}
+.footer-inner{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+@media(max-width:680px){.footer-inner{grid-template-columns:1fr;gap:28px;}}
+.footer-brand .logo-text{font-size:1.4rem;color:var(--clr-cream);margin-bottom:10px;}
+.footer-brand .logo-text span{color:var(--clr-gold);}
+.footer-tagline{font-family:var(--ff-accent);font-style:italic;font-size:0.9rem;color:rgba(253,246,233,0.55);line-height:1.6;}
+.footer-col h4{font-family:var(--ff-display);font-size:0.95rem;font-weight:700;color:var(--clr-cream);margin-bottom:14px;letter-spacing:0.04em;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:8px;}
+.footer-col ul li a{font-family:var(--ff-accent);font-size:0.9rem;color:rgba(253,246,233,0.55);transition:color var(--transition);}
+.footer-col ul li a:hover{color:var(--clr-gold);}
+.footer-bottom{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);}
+.footer-copy{font-family:var(--ff-accent);font-size:0.8rem;color:rgba(253,246,233,0.35);letter-spacing:0.04em;}
+.footer-watermark{font-family:var(--ff-accent);font-size:0.78rem;color:rgba(253,246,233,0.25);letter-spacing:0.06em;}
+.footer-ad-disclosure{
+  width:100%;
+  font-family:var(--ff-accent);
+  font-size:0.75rem;
+  color:rgba(253,246,233,0.28);
+  line-height:1.6;
+  margin-top:8px;
+}
+.footer-ad-disclosure a{color:rgba(253,246,233,0.35);text-decoration:underline;}
+
+/* ===== [010] EASTER EGG — Anne Kapel ===== */
+.egg-overlay{display:none;position:fixed;inset:0;background:var(--clr-overlay);z-index:9999;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.egg-overlay.active{display:flex;animation:fadeIn 0.5s ease both;}
+.egg-modal{background:var(--clr-cream);border-radius:var(--radius-lg);padding:48px 40px;max-width:480px;width:100%;text-align:center;position:relative;animation:riseUp 0.55s cubic-bezier(0.34,1.56,0.64,1) both;box-shadow:0 24px 80px rgba(42,26,14,0.5);border:1px solid var(--clr-divider);}
+.egg-candle{font-size:3rem;margin-bottom:20px;animation:flicker 2s ease-in-out infinite alternate;}
+.egg-title{font-family:var(--ff-display);font-size:0.78rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--clr-ink-muted);margin-bottom:16px;}
+.egg-name{font-family:var(--ff-display);font-size:2.2rem;font-weight:700;font-style:italic;color:var(--clr-walnut);margin-bottom:20px;line-height:1.2;}
+.egg-message{font-family:var(--ff-accent);font-style:italic;font-size:1.05rem;color:var(--clr-ink-muted);line-height:1.8;margin-bottom:32px;}
+.egg-close{background:none;border:1.5px solid var(--clr-divider);border-radius:999px;padding:8px 28px;font-family:var(--ff-accent);font-size:0.9rem;letter-spacing:0.08em;color:var(--clr-ink-muted);cursor:pointer;transition:border-color var(--transition),color var(--transition);}
+.egg-close:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
+.egg-hint{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);font-family:var(--ff-accent);font-size:0.72rem;color:rgba(253,246,233,0.4);white-space:nowrap;letter-spacing:0.1em;}
+
+/* ===== [011] PAINTING EASTER EGG ===== */
+.painting-overlay{display:none;position:fixed;inset:0;background:rgba(10,5,2,0.92);z-index:9998;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);}
+.painting-overlay.active{display:flex;animation:fadeIn 0.6s ease both;}
+.painting-modal{position:relative;max-width:900px;width:100%;animation:riseUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both;}
+.painting-modal img{width:100%;border-radius:var(--radius-lg);box-shadow:0 32px 80px rgba(0,0,0,0.7);border:2px solid rgba(201,146,42,0.3);}
+.painting-caption{
+  text-align:center;
+  margin-top:16px;
+  font-family:var(--ff-accent);
+  font-style:italic;
+  font-size:1rem;
+  color:rgba(253,246,233,0.65);
+  letter-spacing:0.04em;
+}
+.painting-close{
+  position:absolute;
+  top:-14px;right:-14px;
+  background:var(--clr-walnut);
+  color:var(--clr-cream);
+  border:none;border-radius:50%;
+  width:36px;height:36px;
+  font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--transition);
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.painting-close:hover{background:var(--clr-caramel);}
+
+/* ===== [012] RECIPE SUBMIT MODAL ===== */
+.recipe-modal-overlay{display:none;position:fixed;inset:0;background:var(--clr-overlay);z-index:7500;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-y:auto;}
+.recipe-modal-overlay.active{display:flex;animation:fadeIn 0.3s ease both;}
+.recipe-modal{background:var(--clr-cream);border-radius:var(--radius-lg);padding:40px 36px;max-width:600px;width:100%;position:relative;animation:riseUp 0.4s cubic-bezier(0.34,1.56,0.64,1) both;box-shadow:0 24px 80px rgba(42,26,14,0.45);border:1px solid var(--clr-divider);max-height:90vh;overflow-y:auto;}
+.recipe-modal-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.3rem;color:var(--clr-ink-muted);cursor:pointer;transition:color var(--transition);}
+.recipe-modal-close:hover{color:var(--clr-caramel);}
+.recipe-modal h2{font-family:var(--ff-display);font-size:1.6rem;font-weight:700;color:var(--clr-walnut);margin-bottom:6px;}
+.recipe-modal-sub{font-family:var(--ff-accent);font-style:italic;color:var(--clr-ink-muted);font-size:0.95rem;margin-bottom:28px;}
+.recipe-field{margin-bottom:16px;}
+.recipe-field label{display:block;font-family:var(--ff-accent);font-size:0.85rem;color:var(--clr-walnut-mid);margin-bottom:5px;letter-spacing:0.04em;}
+.recipe-input,.recipe-textarea{width:100%;background:var(--clr-bg);border:1.5px solid var(--clr-divider);border-radius:var(--radius-md);padding:11px 16px;font-family:var(--ff-body);font-size:0.95rem;color:var(--clr-ink);transition:border-color var(--transition);}
+.recipe-input:focus,.recipe-textarea:focus{outline:none;border-color:var(--clr-caramel);}
+.recipe-input::placeholder,.recipe-textarea::placeholder{color:var(--clr-ink-muted);}
+.recipe-textarea{resize:vertical;min-height:100px;}
+.btn-recipe-submit{width:100%;background:var(--clr-walnut);color:var(--clr-cream);border:none;border-radius:999px;padding:13px 20px;font-family:var(--ff-accent);font-size:1rem;font-weight:600;letter-spacing:0.06em;cursor:pointer;transition:background var(--transition);margin-top:8px;}
+.btn-recipe-submit:hover{background:var(--clr-caramel);}
+.btn-recipe-submit:disabled{opacity:0.55;cursor:not-allowed;}
+.recipe-msg{font-family:var(--ff-accent);font-size:0.88rem;padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:14px;display:none;}
+.recipe-msg.error{background:#fdf0f0;color:var(--clr-error);border:1px solid rgba(184,48,48,0.2);}
+.recipe-msg.success{background:#f0fdf4;color:var(--clr-success);border:1px solid rgba(45,122,58,0.2);}
+.recipe-msg.visible{display:block;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes riseUp{from{opacity:0;transform:translateY(40px) scale(0.96);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes flicker{0%{text-shadow:0 0 8px rgba(201,146,42,0.8);}100%{text-shadow:0 0 22px rgba(201,146,42,0.5),0 0 4px rgba(255,220,100,0.9);}}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.reveal.in-view{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:768px){.site-nav{display:none;}.hamburger{display:flex;}.hero{padding:64px 0 56px;}}
+@media(max-width:600px){.shop-notify-form{flex-direction:column;}.notify-input{width:100%;}.auth-btn .auth-label{display:none;}.featured-grid{grid-template-columns:1fr;}.order-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- [001] GDPR BANNER -->
+<div class="gdpr-banner" id="gdprBanner" role="region" aria-label="Cookie consent">
+  <p class="gdpr-text">
+    We use cookies to serve relevant ads and improve your experience. Google AdSense requires consent for personalized advertising. By clicking "Accept," you agree to our use of cookies as described in our <a href="/privacy.html">Privacy Policy</a>. You can decline and still use the site — ads may be less relevant.
+  </p>
+  <div class="gdpr-actions">
+    <button class="gdpr-btn-decline" onclick="handleGdpr(false)">Decline</button>
+    <button class="gdpr-btn-accept" onclick="handleGdpr(true)">Accept Cookies</button>
+  </div>
+</div>
+
+<!-- [002] HEADER -->
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <div class="logo-wrap" id="logoWrap" title="Poticas.com" aria-label="Poticas.com home">
+      <svg class="logo-svg" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="74" cy="42" rx="40" ry="24" stroke="#3b2314" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M38 42 C38 24 52 14 64 14 C80 14 92 24 92 40 C92 56 78 64 64 64 C50 64 42 56 42 44 C42 34 50 28 60 28 C68 28 74 34 74 42 C74 48 70 52 64 52 C58 52 55 48 55 44 C55 41 57 39 60 39 C62 39 63 41 63 42" stroke="#3b2314" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text">potica<span>s</span></div>
+    </div>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#featured" class="nav-link">Recipes</a>
+      <a href="#feed"     class="nav-link">Community</a>
+      <a href="#shop"     class="nav-link">Shop</a>
+      <a href="/about-potica.html" class="nav-link">About Potica</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="auth-btn" id="authBtn" onclick="handleAuthClick()" aria-label="Sign in or sign out">
+        <span class="auth-avatar" id="authAvatar">?</span>
+        <span class="auth-label"  id="authLabel">Join the Community</span>
+      </button>
+      <button class="hamburger" id="hamburgerBtn" onclick="openDrawer()" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- [003] MOBILE DRAWER -->
+<div class="nav-drawer-overlay" id="drawerOverlay" onclick="closeDrawer()" aria-hidden="true"></div>
+<nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="nav-drawer-header">
+    <div class="nav-drawer-logo">potica<span>s</span></div>
+    <button class="nav-drawer-close" onclick="closeDrawer()" aria-label="Close">✕</button>
+  </div>
+  <div class="nav-drawer-links">
+    <a href="#featured"           class="drawer-link" onclick="closeDrawer()">📖 Recipes</a>
+    <a href="#feed"               class="drawer-link" onclick="closeDrawer()">🥐 Community</a>
+    <a href="#shop"               class="drawer-link" onclick="closeDrawer()">🏪 Shop</a>
+    <a href="/about-potica.html"  class="drawer-link" onclick="closeDrawer()">🌍 About Potica</a>
+    <a href="javascript:void(0)"  class="drawer-link-cta" onclick="closeDrawer();openAuthModal();">Join the Community</a>
+  </div>
+  <div class="nav-drawer-footer">Every spiral holds a story.</div>
+</nav>
+
+<!-- [004] AUTH MODAL -->
+<div class="modal-overlay" id="authModalOverlay" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+  <div class="auth-modal">
+    <button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">✕</button>
+    <h2 id="authModalTitle">Join the Community</h2>
+    <p class="auth-modal-sub" id="authModalSub">Your grandmother's recipe deserves to live forever.</p>
+    <div class="auth-msg" id="authMsg"></div>
+    <button class="btn-google" id="googleBtn" onclick="signInGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.2 33.5 29.6 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.1 8.1 3l6-6C34.5 6.5 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.2-4z"/></svg>
+      Continue with Google
+    </button>
+    <div class="auth-divider"><span>or</span></div>
+    <div id="authFormWrap">
+      <div class="auth-field">
+        <label for="authEmail">Email</label>
+        <input class="auth-input" type="email" id="authEmail" placeholder="your@email.com" autocomplete="email" />
+      </div>
+      <div class="auth-field">
+        <label for="authPassword">Password</label>
+        <input class="auth-input" type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="btn-auth-submit" id="authSubmitBtn" onclick="handleEmailAuth()">Sign In</button>
+      <p class="auth-toggle">
+        <span id="authToggleText">Don't have an account?</span>
+        <a onclick="toggleAuthMode()"> <span id="authToggleLink">Create one</span></a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- [005] HERO -->
+<section class="hero" aria-labelledby="heroTitle">
+  <svg class="hero-bg-spiral" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M350 350 m-240,0 a240,240 0 1,1 480,0 a200,200 0 1,0 -400,0 a160,160 0 1,1 320,0 a120,120 0 1,0 -240,0 a80,80 0 1,1 160,0 a40,40 0 1,0 -80,0" stroke="#3b2314" stroke-width="6" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div class="container" style="position:relative;z-index:1;">
+    <p class="hero-eyebrow">The World's Finest Rolled Pastry</p>
+    <h1 class="hero-title" id="heroTitle">Life is <em>sweeter</em><br />with Potica.</h1>
+    <p class="hero-subtitle">Your grandmother's recipe deserves to live forever.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openAuthModal()">Join the Community</button>
+      <button class="btn-secondary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop &amp; Recipes →</button>
+    </div>
+  </div>
+</section>
+
+<!-- [006] FEATURED RECIPES — painting background -->
+<section class="featured-section" id="featured" aria-labelledby="featuredTitle">
+
+  <!-- Painting as atmospheric background — opacity 0.18, full overlay -->
+  <!-- IMPORTANT: host the painting image and replace this src -->
+  <!-- Recommended: upload to Supabase Storage (bucket: site-assets) → get public URL → paste here -->
+  <div class="featured-painting-bg" id="featuredPaintingBg"
+       style="background-image:url('https://ihclxurachkewtgnrldc.supabase.co/storage/v1/object/public/site-assets/poticas-community-painting.jpg');"
+       aria-hidden="true"></div>
+
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="ornament reveal" id="featuredOrnament">
+      <span class="ornament-inner" title="Click 3 times for something special">✦ Featured Recipes ✦</span>
+    </div>
+    <p class="section-label reveal">Community Kitchen</p>
+    <h2 class="section-title reveal" style="color:var(--clr-cream);" id="featuredTitle">The Best Recipes,<br />Voted by Bakers</h2>
+    <p class="featured-intro reveal">
+      These are the recipes your fellow enthusiasts love most. Every submission is real, every like is earned. Submit yours and let the community decide.
+    </p>
+
+    <!-- Recipe cards populated by loadFeaturedRecipes() -->
+    <div class="featured-grid" id="featuredGrid">
+      <p class="recipe-empty" id="recipesEmpty">No recipes yet — be the first to submit yours. ✦</p>
+    </div>
+
+    <div class="featured-cta reveal">
+      <button class="btn-submit-recipe" onclick="openRecipeModal()">Submit Your Recipe</button>
+      <span class="featured-cta-note">The most-liked recipe each month earns the Grand Baker badge.</span>
+    </div>
+  </div>
+</section>
+
+<!-- [007] COMMUNITY FEED -->
+<section class="feed-section" id="feed" aria-labelledby="feedTitle">
+  <div class="container">
+    <div class="ornament reveal"><span class="ornament-inner">✦ Community ✦</span></div>
+    <p class="section-label reveal">Fresh from the Oven</p>
+    <h2 class="section-title reveal" id="feedTitle">What's Rolling Today</h2>
+    <br />
+    <div class="feed-layout">
+
+      <div class="feed-main">
+        <!-- COMPOSER -->
+        <div class="composer-wrap reveal">
+          <div class="composer-lock-overlay" id="composerLockOverlay">
+            <span class="lock-icon">🥐</span>
+            <p class="lock-msg">Sign in to share your recipes,<br />stories, and potica memories.</p>
+            <button class="btn-join-overlay" onclick="openAuthModal()">Join the Community</button>
+          </div>
+          <div class="post-composer">
+            <div class="composer-top">
+              <div class="avatar" id="composerAvatar">P</div>
+              <textarea class="composer-input" id="composerInput" placeholder="Share a recipe, a story, or your latest potica creation…" aria-label="Write a post"></textarea>
+            </div>
+            <!-- Photo preview -->
+            <div class="photo-preview" id="photoPreview">
+              <img src="" id="photoPreviewImg" alt="Photo preview" />
+              <button class="photo-preview-remove" onclick="removePhoto()" aria-label="Remove photo">✕</button>
+            </div>
+            <div class="composer-actions">
+              <div class="composer-tags">
+                <button class="tag-btn" id="tag-Recipe"   onclick="addTag(this,'Recipe')">📖 Recipe</button>
+                <button class="tag-btn" id="tag-Story"    onclick="addTag(this,'Story')">✍️ Story</button>
+                <button class="tag-btn" id="tag-Question" onclick="addTag(this,'Question')">❓ Question</button>
+                <input type="file" id="photoFileInput" accept="image/*" onchange="handlePhotoSelect(event)" />
+                <button class="photo-upload-btn" onclick="document.getElementById('photoFileInput').click()" title="Add a photo">
+                  📷 Photo
+                </button>
+              </div>
+              <button class="btn-post" id="postBtn" onclick="submitPost()">Post</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="postsContainer">
+          <div class="feed-loading" id="feedLoading">Rolling the dough… ✦</div>
+        </div>
+
+        <div class="load-more-wrap">
+          <button class="btn-load-more hidden" id="loadMoreBtn" onclick="loadMorePosts()">Load more posts ↓</button>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="feed-sidebar" aria-label="Sidebar">
+        <div class="sidebar-card reveal">
+          <h3>🔥 Trending Topics</h3>
+          <div class="trending-tag">#walnutpotica     <span class="count">1.2k posts</span></div>
+          <div class="trending-tag">#poppyseedpotica  <span class="count">890 posts</span></div>
+          <div class="trending-tag">#tarragonpotica   <span class="count">440 posts</span></div>
+          <div class="trending-tag">#poticastruggles  <span class="count">372 posts</span></div>
+          <div class="trending-tag">#holidaypotica    <span class="count">291 posts</span></div>
+          <div class="trending-tag">#firsttimebaker   <span class="count">188 posts</span></div>
+        </div>
+
+        <!-- Top Bakers — driven by recipe likes -->
+        <div class="sidebar-card reveal">
+          <h3>👑 Top Bakers This Month</h3>
+          <div id="topBakersContainer">
+            <div class="top-baker-row">
+              <div class="avatar" style="width:34px;height:34px;font-size:0.8rem;background:#6b3d24;">?</div>
+              <div class="baker-name">Waiting for recipes…</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card reveal" style="text-align:center;">
+          <h3>🥐 About Poticas.com</h3>
+          <p style="font-family:var(--ff-accent);font-size:0.88rem;color:var(--clr-ink-muted);line-height:1.7;">The world's first community dedicated entirely to potica — the ancient rolled pastry of Central Europe. Share. Bake. Connect.</p>
+          <br/>
+          <button class="btn-post" style="width:100%;" onclick="openAuthModal()">Create Account</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- [008] AFFILIATE SHOP -->
+<section class="shop-section" id="shop" aria-labelledby="shopTitle">
+  <div class="container">
+    <div class="ornament reveal"><span class="ornament-inner" style="color:var(--clr-gold);">✦ Recommended by Poticas.com ✦</span></div>
+    <p class="section-label reveal">Shop</p>
+    <h2 class="section-title reveal" id="shopTitle">Order Potica &amp; Baker's Pantry</h2>
+
+    <!-- FTC + AdSense Affiliate Disclosure — required by FTC (US) and ASA (UK) -->
+    <p class="affiliate-disclosure reveal">
+      <strong>Disclosure:</strong> Poticas.com participates in affiliate programs including Amazon Associates and others. When you click links on this page and make a purchase, we may earn a commission at no extra cost to you. As an Amazon Associate, Poticas.com earns from qualifying purchases. This does not affect our recommendations — we only link to products we genuinely believe in.
+      See our <a href="/privacy.html">Privacy Policy</a> for full details.
+    </p>
+
+    <!-- ORDER POTICA subsection -->
+    <h3 class="shop-subsection-title reveal">🥐 Order Potica</h3>
+    <p class="shop-subsection-sub reveal">While our own kitchen gets ready, here are the bakers we trust.</p>
+
+    <div class="order-grid reveal">
+      <div class="order-card">
+        <span class="order-icon">🌰</span>
+        <div class="order-name">Artisan Walnut Potica</div>
+        <div class="order-source">VIA GOLDBELLY</div>
+        <div class="order-desc">Traditional Slovenian walnut roll, shipped fresh from a family bakery. The real thing.</div>
+        <!-- Replace href with your Goldbelly affiliate link once approved -->
+        <a class="btn-order-link" href="https://www.goldbelly.com/search?q=potica" target="_blank" rel="noopener noreferrer nofollow">Shop on Goldbelly →</a>
+      </div>
+      <div class="order-card">
+        <span class="order-icon">🌸</span>
+        <div class="order-name">Poppy Seed Potica</div>
+        <div class="order-source">VIA GOLDBELLY</div>
+        <div class="order-desc">Silky, sweet, with the deep nutty flavor of the Slovenian countryside.</div>
+        <a class="btn-order-link" href="https://www.goldbelly.com/search?q=potica" target="_blank" rel="noopener noreferrer nofollow">Shop on Goldbelly →</a>
+      </div>
+      <div class="order-card">
+        <span class="order-icon">📦</span>
+        <div class="order-name">Our Own Shop</div>
+        <div class="order-source">POTICAS.COM — COMING SOON</div>
+        <div class="order-desc">We're getting our kitchen ready. Join the waitlist below and we'll reach out personally.</div>
+        <a class="btn-order-link" href="#" onclick="document.getElementById('notifyEmail').focus();return false;">Join Waitlist →</a>
+      </div>
+    </div>
+
+    <!-- BAKER'S PANTRY subsection -->
+    <h3 class="shop-subsection-title reveal">🧑‍🍳 Baker's Pantry</h3>
+    <p class="shop-subsection-sub reveal">Everything you need to make the real thing at home.</p>
+
+    <div class="pantry-grid reveal">
+      <div class="pantry-card">
+        <span class="pantry-icon">🌾</span>
+        <div class="pantry-name">Bread Flour</div>
+        <div class="pantry-brand">KING ARTHUR</div>
+        <!-- Replace with your King Arthur affiliate link from ShareASale -->
+        <a class="btn-pantry-link" href="https://www.kingarthurbaking.com/shop/items/king-arthur-unbleached-bread-flour" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">🍯</span>
+        <div class="pantry-name">Raw Wildflower Honey</div>
+        <div class="pantry-brand">VIA AMAZON</div>
+        <a class="btn-pantry-link" href="https://www.amazon.com/s?k=raw+wildflower+honey+baking&tag=YOURTAG-20" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">🌰</span>
+        <div class="pantry-name">Whole Walnuts (5 lb)</div>
+        <div class="pantry-brand">VIA AMAZON</div>
+        <a class="btn-pantry-link" href="https://www.amazon.com/s?k=whole+walnuts+5+lb+baking&tag=YOURTAG-20" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">🫙</span>
+        <div class="pantry-name">Instant Dry Yeast</div>
+        <div class="pantry-brand">SAF / AMAZON</div>
+        <a class="btn-pantry-link" href="https://www.amazon.com/s?k=SAF+instant+yeast+1lb&tag=YOURTAG-20" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">🍳</span>
+        <div class="pantry-name">Rolling Pin (French)</div>
+        <div class="pantry-brand">VIA AMAZON</div>
+        <a class="btn-pantry-link" href="https://www.amazon.com/s?k=french+rolling+pin+tapered+baking&tag=YOURTAG-20" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">📖</span>
+        <div class="pantry-name">Slovenian Cookbook</div>
+        <div class="pantry-brand">VIA AMAZON</div>
+        <a class="btn-pantry-link" href="https://www.amazon.com/s?k=slovenian+cookbook+traditional+recipes&tag=YOURTAG-20" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">⚖️</span>
+        <div class="pantry-name">Digital Kitchen Scale</div>
+        <div class="pantry-brand">VIA AMAZON</div>
+        <a class="btn-pantry-link" href="https://www.amazon.com/s?k=digital+kitchen+scale+baking+grams&tag=YOURTAG-20" target="_blank" rel="noopener noreferrer nofollow">Shop →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">🎯</span>
+        <div class="pantry-name">5Best2Buy Reviews</div>
+        <div class="pantry-brand">ZENGINE PARTNER</div>
+        <a class="btn-pantry-link" href="https://5best2buy.com" target="_blank" rel="noopener noreferrer">See Reviews →</a>
+      </div>
+    </div>
+
+    <!-- Waitlist -->
+    <div class="shop-notify-wrap reveal">
+      <p style="font-family:var(--ff-accent);font-style:italic;color:rgba(253,246,233,0.6);margin-bottom:20px;font-size:0.95rem;">
+        Join the waitlist — we'll reach out personally when our kitchen ships.
+      </p>
+      <div class="shop-notify-form">
+        <input type="email" class="notify-input" id="notifyEmail" placeholder="your@email.com" aria-label="Email for shop notification" />
+        <button class="btn-notify" id="notifyBtn" onclick="submitNotify()">Join Waitlist</button>
+      </div>
+      <p class="notify-success" id="notifySuccess">🍞 You're on the list! We'll reach out personally.</p>
+    </div>
+  </div>
+</section>
+
+<!-- [009] FOOTER -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-text">potica<span>s</span></div>
+        <p class="footer-tagline">The world's finest rolled pastry, brought together in one place. Bake. Share. Remember.<br/><br/><em>Every spiral holds a story.</em></p>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="#feed">Feed</a></li>
+          <li><a href="#featured">Recipes</a></li>
+          <li><a href="/about-potica.html">About Potica</a></li>
+          <li><a href="javascript:void(0)" onclick="openAuthModal()">Create Account</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Shop &amp; Legal</h4>
+        <ul>
+          <li><a href="#shop">Order Potica</a></li>
+          <li><a href="#shop">Baker's Pantry</a></li>
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Poticas.com — All rights reserved.</p>
+      <p class="footer-watermark">www.zengine.site | © 2026 Zengine™</p>
+      <p class="footer-ad-disclosure">
+        This site is monetized through Google AdSense (ca-pub-8826956454892311) and affiliate marketing programs including Amazon Associates. Ads are served by Google and may use cookies to personalize content. We participate in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com. See our <a href="/privacy.html">Privacy Policy</a> for full details on data use and your rights.
+      </p>
+    </div>
+  </div>
+
+  <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║                                                              ║
+  ║    Dedicated in loving memory of:  Anne Kapel               ║
+  ║                                                              ║
+  ║    May every spiral rolled in this kitchen carry             ║
+  ║    the warmth of your hands and the sweetness               ║
+  ║    of your memory. You are loved. You are missed.           ║
+  ║                                                              ║
+  ╚══════════════════════════════════════════════════════════════╝
+  -->
+</footer>
+
+<!-- [010] EASTER EGG — Anne Kapel -->
+<div class="egg-overlay" id="eggOverlay" role="dialog" aria-modal="true" aria-labelledby="eggModalTitle">
+  <div class="egg-modal">
+    <div class="egg-candle" aria-hidden="true">🕯️</div>
+    <p class="egg-title">In Loving Memory</p>
+    <h2 class="egg-name" id="eggModalTitle">Anne Kapel</h2>
+    <p class="egg-message">
+      Every spiral holds a story.<br />
+      Every recipe carries a legacy.<br /><br />
+      This place was made in your honor —<br />
+      for every loaf you ever rolled,<br />
+      every kitchen that smelled delicious<br />
+      because you made it all with love.
+    </p>
+    <button class="egg-close" onclick="closeEasterEgg()" aria-label="Close memorial">Close</button>
+    <p class="egg-hint">You found something special.</p>
+  </div>
+</div>
+
+<!-- [011] PAINTING EASTER EGG — the community painting -->
+<div class="painting-overlay" id="paintingOverlay" role="dialog" aria-modal="true" aria-label="Community painting">
+  <div class="painting-modal">
+    <button class="painting-close" onclick="closePainting()" aria-label="Close">✕</button>
+    <!-- Same painting — full resolution in the modal -->
+    <img src="https://ihclxurachkewtgnrldc.supabase.co/storage/v1/object/public/site-assets/poticas-community-painting.jpg"
+         alt="A gathering of people from around the world sharing potica by candlelight, with a map of Europe glowing in the background."
+         id="paintingModalImg" />
+    <p class="painting-caption">
+      "This is why we gather. This is why we bake."
+    </p>
+  </div>
+</div>
+
+<!-- [012] RECIPE SUBMIT MODAL -->
+<div class="recipe-modal-overlay" id="recipeModalOverlay" role="dialog" aria-modal="true" aria-labelledby="recipeModalTitle">
+  <div class="recipe-modal">
+    <button class="recipe-modal-close" onclick="closeRecipeModal()" aria-label="Close">✕</button>
+    <h2 id="recipeModalTitle">Submit Your Recipe</h2>
+    <p class="recipe-modal-sub">Your recipe will be reviewed and added to the community cookbook. The most-liked recipe each month earns the Grand Baker badge.</p>
+    <div class="recipe-msg" id="recipeMsg"></div>
+    <div class="recipe-field">
+      <label for="recipeTitle">Recipe Title *</label>
+      <input class="recipe-input" type="text" id="recipeTitle" placeholder="e.g. Babica's Walnut Potica" />
+    </div>
+    <div class="recipe-field">
+      <label for="recipeOrigin">Origin / Region</label>
+      <input class="recipe-input" type="text" id="recipeOrigin" placeholder="e.g. Ljubljana, Slovenia" />
+    </div>
+    <div class="recipe-field">
+      <label for="recipeDesc">Short Description</label>
+      <input class="recipe-input" type="text" id="recipeDesc" placeholder="One sentence — what makes this one special?" />
+    </div>
+    <div class="recipe-field">
+      <label for="recipeIngredients">Ingredients *</label>
+      <textarea class="recipe-textarea" id="recipeIngredients" placeholder="List each ingredient on a new line..."></textarea>
+    </div>
+    <div class="recipe-field">
+      <label for="recipeInstructions">Instructions *</label>
+      <textarea class="recipe-textarea" id="recipeInstructions" style="min-height:140px;" placeholder="Step by step. Don't leave anything out — your readers are counting on you."></textarea>
+    </div>
+    <button class="btn-recipe-submit" id="recipeSubmitBtn" onclick="submitRecipe()">Submit Recipe</button>
+  </div>
+</div>
+
+<!-- [013] SCRIPT -->
+<script>
+// ===================================================
+// BOOT ORDER:
+//   1. CONFIG BLOCK
+//   2. supabaseClient init
+//   3. GDPR check → AdSense if accepted
+//   4. Scroll reveal
+//   5. Auth state listener
+//   6. Easter eggs (logo + ornament)
+//   7. Photo upload handlers
+//   8. loadPosts() + loadFeaturedRecipes() + loadTopBakers()
+// ===================================================
+
+var CONFIG = {
+  DEV_MODE: false,
+  SUPABASE_URL:      'https://ihclxurachkewtgnrldc.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_O3yozPaOxtyu0fAHKhXzIQ_nlTmVFlL',
+  POSTS_TABLE:        'posts',
+  LIKES_TABLE:        'post_likes',
+  RECIPES_TABLE:      'recipes',
+  RECIPE_LIKES_TABLE: 'recipe_likes',
+  NOTIFY_TABLE:       'notify_list',
+  STORAGE_BUCKET:     'post-images',
+  PAGE_SIZE:          10,
+  currentPage:        0,
+  hasMorePosts:       true,
+  authMode:           'signin',
+  // Easter eggs
+  LOGO_CLICKS_NEEDED:     5,
+  logoClickCount:         0,
+  logoClickTimer:         null,
+  LOGO_CLICK_WINDOW_MS:   6000,
+  ORNAMENT_CLICKS_NEEDED: 3,
+  ornamentClickCount:     0,
+  ornamentClickTimer:     null,
+  ORNAMENT_CLICK_WINDOW_MS: 4000,
+  currentUser:    null,
+  selectedPhoto:  null,
+  selectedTag:    null
+};
+
+function log() {
+  if (CONFIG.DEV_MODE) {
+    var a = Array.prototype.slice.call(arguments);
+    a.unshift('[Poticas]');
+    console.log.apply(console, a);
+  }
+}
+
+// ===== SUPABASE =====
+var supabaseClient = null;
+(function initSupabase() {
+  try {
+    if (!window.supabase) { console.error('[Poticas] Supabase not loaded.'); return; }
+    supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    log('Supabase ready.');
+  } catch(e) { console.error('[Poticas] initSupabase:', e); }
+})();
+
+// ===== GDPR =====
+// AdSense ONLY fires after explicit accept. GA4 fires immediately (analytics, no consent needed under ePrivacy Directive for anonymized analytics).
+(function initGdpr() {
+  try {
+    var consent = localStorage.getItem('poticas_gdpr');
+    if (consent !== null) {
+      document.getElementById('gdprBanner').classList.add('hidden');
+      if (consent === 'true') loadAdSense();
+    }
+  } catch(e) { console.error('[Poticas] initGdpr:', e); }
+})();
+
+function handleGdpr(accepted) {
+  try {
+    localStorage.setItem('poticas_gdpr', String(accepted));
+    document.getElementById('gdprBanner').classList.add('hidden');
+    if (accepted) loadAdSense();
+    // GA4: update consent state
+    if (typeof gtag !== 'undefined') {
+      gtag('consent', 'update', {
+        ad_storage:        accepted ? 'granted' : 'denied',
+        analytics_storage: 'granted'
+      });
+    }
+    log('GDPR:', accepted);
+  } catch(e) { console.error('[Poticas] handleGdpr:', e); }
+}
+
+function loadAdSense() {
+  try {
+    if (document.querySelector('script[src*="pagead2.googlesyndication"]')) return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8826956454892311';
+    s.setAttribute('crossorigin','anonymous');
+    document.head.appendChild(s);
+    log('AdSense injected post-consent.');
+  } catch(e) { console.error('[Poticas] loadAdSense:', e); }
+}
+
+// ===== SCROLL REVEAL =====
+(function initScrollReveal() {
+  try {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function(el){ el.classList.add('in-view'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('in-view'); obs.unobserve(entry.target); }
+      });
+    }, { threshold: 0.10 });
+    els.forEach(function(el){ obs.observe(el); });
+  } catch(e) { console.error('[Poticas] initScrollReveal:', e); }
+})();
+
+// ===== AUTH =====
+(function initAuth() {
+  try {
+    if (!supabaseClient) return;
+    supabaseClient.auth.onAuthStateChange(function(event, session) {
+      try {
+        CONFIG.currentUser = session ? session.user : null;
+        updateAuthUI();
+        if (event === 'SIGNED_IN') closeAuthModal();
+      } catch(e) { console.error('[Poticas] onAuthStateChange:', e); }
+    });
+    supabaseClient.auth.getSession().then(function(r) {
+      try {
+        var s = r.data && r.data.session ? r.data.session : null;
+        CONFIG.currentUser = s ? s.user : null;
+        updateAuthUI();
+      } catch(e) { console.error('[Poticas] getSession:', e); }
+    });
+  } catch(e) { console.error('[Poticas] initAuth:', e); }
+})();
+
+function updateAuthUI() {
+  try {
+    var user   = CONFIG.currentUser;
+    var btn    = document.getElementById('authBtn');
+    var av     = document.getElementById('authAvatar');
+    var lbl    = document.getElementById('authLabel');
+    var lockOv = document.getElementById('composerLockOverlay');
+    var compAv = document.getElementById('composerAvatar');
+    if (user) {
+      btn.classList.add('signed-in');
+      lbl.textContent = 'Sign Out';
+      var meta = user.user_metadata || {};
+      var name = meta.full_name || meta.name || user.email || 'Baker';
+      var init = name.charAt(0).toUpperCase();
+      var pic  = meta.avatar_url || meta.picture || '';
+      if (pic) {
+        av.innerHTML    = '<img src="' + escHtml(pic) + '" alt="' + escHtml(init) + '" />';
+        compAv.innerHTML = '<img src="' + escHtml(pic) + '" alt="' + escHtml(init) + '" />';
+      } else {
+        av.textContent    = init;
+        compAv.textContent = init;
+      }
+      if (lockOv) lockOv.classList.add('hidden');
+    } else {
+      btn.classList.remove('signed-in');
+      lbl.textContent    = 'Join the Community';
+      av.textContent     = '?';
+      compAv.textContent = 'P';
+      compAv.innerHTML   = 'P';
+      if (lockOv) lockOv.classList.remove('hidden');
+    }
+  } catch(e) { console.error('[Poticas] updateAuthUI:', e); }
+}
+
+function handleAuthClick() {
+  if (CONFIG.currentUser) { signOut(); } else { openAuthModal(); }
+}
+
+async function signOut() {
+  try {
+    if (supabaseClient) { var r = await supabaseClient.auth.signOut(); if (r.error) throw r.error; }
+  } catch(e) { console.error('[Poticas] signOut:', e); }
+}
+
+async function signInGoogle() {
+  try {
+    if (!supabaseClient) return;
+    var r = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin }
+    });
+    if (r.error) throw r.error;
+  } catch(e) {
+    console.error('[Poticas] signInGoogle:', e);
+    showAuthMsg('Google sign-in failed. Try email/password below.', 'error');
+  }
+}
+
+async function handleEmailAuth() {
+  try {
+    if (!supabaseClient) return;
+    var email    = (document.getElementById('authEmail').value || '').trim();
+    var password = (document.getElementById('authPassword').value || '').trim();
+    var btn      = document.getElementById('authSubmitBtn');
+    if (!email || !password) {
+      if (!email)    document.getElementById('authEmail').classList.add('error');
+      if (!password) document.getElementById('authPassword').classList.add('error');
+      showAuthMsg('Please enter your email and password.', 'error');
+      return;
+    }
+    document.getElementById('authEmail').classList.remove('error');
+    document.getElementById('authPassword').classList.remove('error');
+    btn.disabled = true;
+    btn.textContent = CONFIG.authMode === 'signup' ? 'Creating account…' : 'Signing in…';
+    var result = CONFIG.authMode === 'signup'
+      ? await supabaseClient.auth.signUp({ email: email, password: password })
+      : await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+    if (result.error) throw result.error;
+    if (CONFIG.authMode === 'signup') showAuthMsg('Account created! Check your email to confirm.', 'success');
+    btn.disabled = false;
+    btn.textContent = CONFIG.authMode === 'signup' ? 'Create Account' : 'Sign In';
+  } catch(e) {
+    console.error('[Poticas] handleEmailAuth:', e);
+    var b = document.getElementById('authSubmitBtn');
+    if (b) { b.disabled = false; b.textContent = CONFIG.authMode === 'signup' ? 'Create Account' : 'Sign In'; }
+    showAuthMsg(e.message || 'Something went wrong.', 'error');
+  }
+}
+
+function toggleAuthMode() {
+  CONFIG.authMode = CONFIG.authMode === 'signin' ? 'signup' : 'signin';
+  var isSignup = CONFIG.authMode === 'signup';
+  document.getElementById('authSubmitBtn').textContent  = isSignup ? 'Create Account' : 'Sign In';
+  document.getElementById('authToggleText').textContent = isSignup ? 'Already have an account?' : 'Don\'t have an account?';
+  document.getElementById('authToggleLink').textContent = isSignup ? 'Sign in' : 'Create one';
+  document.getElementById('authPassword').setAttribute('autocomplete', isSignup ? 'new-password' : 'current-password');
+  hideAuthMsg();
+}
+
+function showAuthMsg(msg, type) {
+  try { var e = document.getElementById('authMsg'); e.textContent = msg; e.className = 'auth-msg ' + type + ' visible'; } catch(x) {}
+}
+function hideAuthMsg() {
+  try { var e = document.getElementById('authMsg'); e.className = 'auth-msg'; e.textContent = ''; } catch(x) {}
+}
+function openAuthModal() {
+  try {
+    document.getElementById('authModalOverlay').classList.add('active');
+    document.body.classList.add('modal-open');
+    setTimeout(function(){ document.getElementById('authEmail').focus(); }, 100);
+  } catch(e) { console.error('[Poticas] openAuthModal:', e); }
+}
+function closeAuthModal() {
+  try {
+    document.getElementById('authModalOverlay').classList.remove('active');
+    document.body.classList.remove('modal-open');
+    hideAuthMsg();
+  } catch(e) {}
+}
+document.getElementById('authModalOverlay').addEventListener('click', function(e) { if (e.target === this) closeAuthModal(); });
+
+// ===== PHOTO UPLOAD =====
+// DEPENDS ON: Supabase Storage bucket 'post-images' (must exist and be public)
+function handlePhotoSelect(event) {
+  try {
+    var file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Photo must be under 5MB.');
+      event.target.value = '';
+      return;
+    }
+    CONFIG.selectedPhoto = file;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var preview = document.getElementById('photoPreview');
+      var previewImg = document.getElementById('photoPreviewImg');
+      previewImg.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } catch(e) { console.error('[Poticas] handlePhotoSelect:', e); }
+}
+
+function removePhoto() {
+  try {
+    CONFIG.selectedPhoto = null;
+    document.getElementById('photoPreview').style.display = 'none';
+    document.getElementById('photoPreviewImg').src = '';
+    document.getElementById('photoFileInput').value = '';
+  } catch(e) {}
+}
+
+// Upload photo to Supabase Storage → returns public URL or null
+async function uploadPhoto(file, postId) {
+  try {
+    if (!supabaseClient || !file) return null;
+    var ext  = file.name.split('.').pop();
+    var path = 'posts/' + postId + '-' + Date.now() + '.' + ext;
+    var r = await supabaseClient.storage.from(CONFIG.STORAGE_BUCKET).upload(path, file, { cacheControl: '3600', upsert: false });
+    if (r.error) { log('Photo upload error (non-fatal):', r.error.message); return null; }
+    var urlData = supabaseClient.storage.from(CONFIG.STORAGE_BUCKET).getPublicUrl(path);
+    return urlData.data ? urlData.data.publicUrl : null;
+  } catch(e) { console.error('[Poticas] uploadPhoto:', e); return null; }
+}
+
+// ===== LIKE SYSTEM (posts) =====
+var likedPosts = new Set(JSON.parse(localStorage.getItem('poticas_liked') || '[]'));
+
+async function toggleLike(btn, postId) {
+  try {
+    var pid      = String(postId);
+    var countEl  = btn.querySelector('.like-count');
+    var current  = parseInt(countEl.textContent, 10) || 0;
+    var wasLiked = likedPosts.has(pid);
+    if (wasLiked) {
+      likedPosts.delete(pid); btn.classList.remove('liked');
+      countEl.textContent = formatCount(Math.max(0, current - 1));
+    } else {
+      likedPosts.add(pid); btn.classList.add('liked');
+      countEl.textContent = formatCount(current + 1);
+      var h = btn.querySelector('.heart');
+      h.style.transform = 'scale(1.5)';
+      setTimeout(function(){ h.style.transform = ''; }, 220);
+    }
+    localStorage.setItem('poticas_liked', JSON.stringify(Array.from(likedPosts)));
+    if (supabaseClient && CONFIG.currentUser && !pid.startsWith('mock_')) {
+      var numId = parseInt(pid, 10);
+      if (!isNaN(numId)) {
+        if (wasLiked) {
+          await supabaseClient.from(CONFIG.LIKES_TABLE).delete().eq('post_id', numId).eq('user_id', CONFIG.currentUser.id);
+        } else {
+          var ir = await supabaseClient.from(CONFIG.LIKES_TABLE).insert({ post_id: numId, user_id: CONFIG.currentUser.id });
+          if (ir.error && ir.error.code !== '23505') throw ir.error;
+        }
+      }
+    }
+  } catch(e) { console.error('[Poticas] toggleLike:', e); }
+}
+
+// ===== LIKE SYSTEM (recipes) =====
+var likedRecipes = new Set(JSON.parse(localStorage.getItem('poticas_rliked') || '[]'));
+
+async function toggleRecipeLike(btn, recipeId) {
+  try {
+    var rid      = String(recipeId);
+    var countEl  = btn.querySelector('.rlike-count');
+    var current  = parseInt(countEl.textContent, 10) || 0;
+    var wasLiked = likedRecipes.has(rid);
+    if (wasLiked) {
+      likedRecipes.delete(rid); btn.classList.remove('liked');
+      countEl.textContent = Math.max(0, current - 1);
+    } else {
+      likedRecipes.add(rid); btn.classList.add('liked');
+      countEl.textContent = current + 1;
+      var h = btn.querySelector('.heart');
+      h.style.transform = 'scale(1.5)';
+      setTimeout(function(){ h.style.transform = ''; }, 220);
+    }
+    localStorage.setItem('poticas_rliked', JSON.stringify(Array.from(likedRecipes)));
+    if (supabaseClient && CONFIG.currentUser) {
+      var numId = parseInt(rid, 10);
+      if (!isNaN(numId)) {
+        if (wasLiked) {
+          await supabaseClient.from(CONFIG.RECIPE_LIKES_TABLE).delete().eq('recipe_id', numId).eq('user_id', CONFIG.currentUser.id);
+          await supabaseClient.from(CONFIG.RECIPES_TABLE).update({ likes: Math.max(0, current - 1) }).eq('id', numId);
+        } else {
+          var ri = await supabaseClient.from(CONFIG.RECIPE_LIKES_TABLE).insert({ recipe_id: numId, user_id: CONFIG.currentUser.id });
+          if (!ri.error || ri.error.code === '23505') {
+            await supabaseClient.from(CONFIG.RECIPES_TABLE).update({ likes: current + 1 }).eq('id', numId);
+          }
+        }
+      }
+    }
+  } catch(e) { console.error('[Poticas] toggleRecipeLike:', e); }
+}
+
+function formatCount(n) {
+  n = Math.max(0, n);
+  if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'k';
+  return String(n);
+}
+
+// ===== POST COMPOSER =====
+function addTag(btn, tag) {
+  try {
+    document.querySelectorAll('.tag-btn').forEach(function(b){ b.classList.remove('active'); });
+    CONFIG.selectedTag = CONFIG.selectedTag === tag ? null : tag;
+    if (CONFIG.selectedTag) btn.classList.add('active');
+  } catch(e) {}
+}
+
+async function submitPost() {
+  try {
+    if (!CONFIG.currentUser) { openAuthModal(); return; }
+    var input   = document.getElementById('composerInput');
+    var postBtn = document.getElementById('postBtn');
+    var text    = (input.value || '').trim();
+    if (!text) {
+      input.style.borderColor = 'var(--clr-caramel)';
+      input.focus();
+      setTimeout(function(){ input.style.borderColor = ''; }, 1400);
+      return;
+    }
+    if (!supabaseClient) return;
+    postBtn.disabled = true;
+    postBtn.textContent = 'Posting…';
+    var meta        = CONFIG.currentUser.user_metadata || {};
+    var displayName = meta.full_name || meta.name || CONFIG.currentUser.email || 'Community Member';
+    var insertData  = {
+      body:         text,
+      content_type: CONFIG.selectedTag || 'Post',
+      user_id:      CONFIG.currentUser.id,
+      display_name: displayName
+    };
+    var r = await supabaseClient.from(CONFIG.POSTS_TABLE).insert(insertData).select('id').single();
+    if (r.error) throw r.error;
+    // Upload photo if selected
+    if (CONFIG.selectedPhoto && r.data) {
+      var photoUrl = await uploadPhoto(CONFIG.selectedPhoto, r.data.id);
+      if (photoUrl) {
+        await supabaseClient.from(CONFIG.POSTS_TABLE).update({ photo_url: photoUrl }).eq('id', r.data.id);
+      }
+    }
+    input.value = '';
+    CONFIG.selectedTag   = null;
+    CONFIG.selectedPhoto = null;
+    document.querySelectorAll('.tag-btn').forEach(function(b){ b.classList.remove('active'); });
+    removePhoto();
+    postBtn.disabled    = false;
+    postBtn.textContent = 'Post';
+    CONFIG.currentPage  = 0;
+    CONFIG.hasMorePosts = true;
+    document.getElementById('postsContainer').querySelectorAll('.post-card').forEach(function(el){ el.remove(); });
+    await loadPosts(true);
+  } catch(e) {
+    console.error('[Poticas] submitPost:', e);
+    var pb = document.getElementById('postBtn');
+    if (pb) { pb.disabled = false; pb.textContent = 'Post'; }
+    showFeedError('Failed to post. ' + (e.message || 'Check console.'));
+  }
+}
+
+// ===== LOAD POSTS =====
+async function loadPosts(isReset) {
+  try {
+    var container   = document.getElementById('postsContainer');
+    var loadingEl   = document.getElementById('feedLoading');
+    var loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadingEl) loadingEl.style.display = 'block';
+    if (loadMoreBtn) loadMoreBtn.disabled = true;
+    if (!supabaseClient) {
+      if (loadingEl) loadingEl.style.display = 'none';
+      renderMockPosts(container, true);
+      return;
+    }
+    var from = CONFIG.currentPage * CONFIG.PAGE_SIZE;
+    var to   = from + CONFIG.PAGE_SIZE - 1;
+    // Filter out flagged posts
+    var r = await supabaseClient
+      .from(CONFIG.POSTS_TABLE)
+      .select('id, created_at, body, content_type, display_name, user_id, photo_url')
+      .eq('flagged', false)
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    if (r.error) throw r.error;
+    var posts = r.data || [];
+    if (loadingEl) loadingEl.style.display = 'none';
+    CONFIG.hasMorePosts = posts.length >= CONFIG.PAGE_SIZE;
+    if (loadMoreBtn) {
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.classList[CONFIG.hasMorePosts && posts.length > 0 ? 'remove' : 'add']('hidden');
+    }
+    if (posts.length === 0 && CONFIG.currentPage === 0) {
+      renderMockPosts(container, true);
+      return;
+    }
+    // Like counts
+    var postIds = posts.map(function(p){ return p.id; });
+    var likeCounts = {};
+    if (postIds.length > 0) {
+      try {
+        var lr = await supabaseClient.from(CONFIG.LIKES_TABLE).select('post_id').in('post_id', postIds);
+        if (!lr.error && lr.data) {
+          lr.data.forEach(function(row){ likeCounts[row.post_id] = (likeCounts[row.post_id] || 0) + 1; });
+        }
+      } catch(le) { log('Like count non-fatal:', le); }
+    }
+    if (isReset || CONFIG.currentPage === 0) {
+      container.querySelectorAll('.post-card').forEach(function(el){ el.remove(); });
+    }
+    posts.forEach(function(post) {
+      container.appendChild(buildPostCard(post, likeCounts[post.id] || 0));
+    });
+  } catch(e) {
+    console.error('[Poticas] loadPosts:', e);
+    var le = document.getElementById('feedLoading');
+    if (le) le.style.display = 'none';
+    showFeedError('Could not load posts. ' + (e.message || 'Check config.'));
+    if (CONFIG.currentPage === 0) renderMockPosts(document.getElementById('postsContainer'), true);
+  }
+}
+
+async function loadMorePosts() {
+  try { CONFIG.currentPage++; await loadPosts(false); }
+  catch(e) { console.error('[Poticas] loadMorePosts:', e); CONFIG.currentPage--; }
+}
+
+function buildPostCard(post, likeCount) {
+  try {
+    var card = document.createElement('article');
+    card.className     = 'post-card';
+    card.dataset.postId = post.id;
+    var ct   = post.content_type || 'Post';
+    var name = post.display_name || 'Community Member';
+    var init = name.charAt(0).toUpperCase();
+    var colors = ['#6b3d24','#3b2314','#b86b2e','#c9922a'];
+    var ci = (typeof post.id === 'number') ? post.id % 4 : 0;
+    var ac = colors[ci];
+    var as = ac === '#c9922a' ? 'background:' + ac + ';color:#3b2314;' : 'background:' + ac + ';';
+    var ts = '';
+    try { ts = new Date(post.created_at).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); } catch(x) {}
+    var pid      = String(post.id);
+    var lkClass  = likedPosts.has(pid) ? ' liked' : '';
+    var photoHtml = '';
+    if (post.photo_url) {
+      photoHtml = '<img class="post-image" src="' + escHtml(post.photo_url) + '" alt="Post image" loading="lazy" />';
+    }
+    var profileHref = '/profile.html?id=' + escHtml(pid);
+    card.innerHTML =
+      '<div class="post-header">' +
+        '<div class="avatar" style="' + as + '">' + escHtml(init) + '</div>' +
+        '<div class="post-meta">' +
+          '<div><button class="post-author-link" onclick="window.location.href=\'' + profileHref + '\'">' + escHtml(name) + '</button>' +
+          '<span class="post-tag">' + escHtml(ct) + '</span></div>' +
+          '<div class="post-time">' + escHtml(ts) + '</div>' +
+        '</div>' +
+      '</div>' +
+      photoHtml +
+      '<div class="post-body">' + escHtml(post.body || '') + '</div>' +
+      '<div class="post-footer">' +
+        '<button class="like-btn' + lkClass + '" onclick="toggleLike(this,\'' + escHtml(pid) + '\')" aria-label="Like">' +
+          '<span class="heart">♥</span><span class="like-count">' + formatCount(likeCount) + '</span>' +
+        '</button>' +
+        '<button class="comment-btn" aria-label="Comments" onclick="openComments(\'' + escHtml(pid) + '\')">' +
+          '💬 <span class="comment-count">0</span>' +
+        '</button>' +
+        '<button class="comment-btn" aria-label="Save">🔖 Save</button>' +
+      '</div>';
+    card.style.opacity   = '0';
+    card.style.transform = 'translateY(16px)';
+    requestAnimationFrame(function() {
+      card.style.transition = 'opacity 0.4s ease,transform 0.4s ease';
+      card.style.opacity    = '1';
+      card.style.transform  = 'translateY(0)';
+    });
+    return card;
+  } catch(e) {
+    console.error('[Poticas] buildPostCard:', e);
+    var f = document.createElement('article');
+    f.className = 'post-card';
+    f.innerHTML = '<div class="post-body">[Post could not be rendered]</div>';
+    return f;
+  }
+}
+
+// Comment thread skeleton — full threads are next sprint
+function openComments(postId) {
+  log('Comment thread for post', postId, '— coming next sprint.');
+}
+
+function showFeedError(msg) {
+  try {
+    var c = document.getElementById('postsContainer');
+    var x = c.querySelector('.feed-error');
+    if (x) x.remove();
+    var el = document.createElement('div');
+    el.className   = 'feed-error';
+    el.textContent = '⚠ ' + msg;
+    c.insertBefore(el, c.firstChild);
+  } catch(e) {}
+}
+
+function renderMockPosts(container, clearFirst) {
+  try {
+    if (clearFirst) container.querySelectorAll('.post-card').forEach(function(el){ el.remove(); });
+    container.insertAdjacentHTML('beforeend',
+      '<article class="post-card" data-post-id="mock_1">' +
+        '<div class="post-header"><div class="avatar" style="background:#6b3d24;">M</div>' +
+        '<div class="post-meta"><div><button class="post-author-link">Marija Novak</button><span class="post-tag">Recipe</span></div>' +
+        '<div class="post-time">2 hours ago · Ljubljana, Slovenia</div></div></div>' +
+        '<div class="post-body">My grandmother\'s walnut potica, passed down three generations. The secret is toasting the walnuts and adding a splash of rum to the filling. Here\'s the core of what makes it sing:</div>' +
+        '<div class="post-recipe-block" id="recipes"><h4>🌰 Walnut Filling (the heart of it)</h4>' +
+        '<ul><li>500g finely ground walnuts</li><li>150g warm honey</li><li>2 tbsp dark rum</li>' +
+        '<li>Zest of one lemon</li><li>2 egg whites, whisked stiff</li><li>Pinch of cinnamon, pinch of clove</li></ul></div>' +
+        '<div class="post-footer">' +
+        '<button class="like-btn" onclick="toggleLike(this,\'mock_1\')" aria-label="Like"><span class="heart">♥</span><span class="like-count">142</span></button>' +
+        '<button class="comment-btn" onclick="openComments(\'mock_1\')">💬 <span class="comment-count">38</span></button>' +
+        '<button class="comment-btn">🔖 Save</button></div></article>' +
+
+      '<article class="post-card" data-post-id="mock_2">' +
+        '<div class="post-header"><div class="avatar" style="background:#b86b2e;">T</div>' +
+        '<div class="post-meta"><div><button class="post-author-link">Tony Blazic</button><span class="post-tag">Story</span></div>' +
+        '<div class="post-time">Yesterday · Cleveland, OH</div></div></div>' +
+        '<div class="post-body">Made my first solo potica after my babica passed. Cried through the whole thing. It wasn\'t perfect — the dough tore a little on the third roll — but it tasted exactly like Sunday mornings. Some things live in your hands and you don\'t even know it. 🕯️</div>' +
+        '<div class="post-footer">' +
+        '<button class="like-btn" onclick="toggleLike(this,\'mock_2\')" aria-label="Like"><span class="heart">♥</span><span class="like-count">387</span></button>' +
+        '<button class="comment-btn" onclick="openComments(\'mock_2\')">💬 <span class="comment-count">91</span></button>' +
+        '<button class="comment-btn">🔖 Save</button></div></article>' +
+
+      '<article class="post-card" data-post-id="mock_3">' +
+        '<div class="post-header"><div class="avatar" style="background:#c9922a;color:#3b2314;">S</div>' +
+        '<div class="post-meta"><div><button class="post-author-link">Sara K.</button><span class="post-tag">Question</span></div>' +
+        '<div class="post-time">3 days ago</div></div></div>' +
+        '<div class="post-body">Unpopular opinion incoming — poppy seed potica is better than walnut. I said what I said. Discuss. 🌸 (I\'ll wait.)</div>' +
+        '<div class="post-footer">' +
+        '<button class="like-btn" onclick="toggleLike(this,\'mock_3\')" aria-label="Like"><span class="heart">♥</span><span class="like-count">211</span></button>' +
+        '<button class="comment-btn" onclick="openComments(\'mock_3\')">💬 <span class="comment-count">204</span></button>' +
+        '<button class="comment-btn">🔖 Save</button></div></article>'
+    );
+  } catch(e) { console.error('[Poticas] renderMockPosts:', e); }
+}
+
+// ===== FEATURED RECIPES =====
+async function loadFeaturedRecipes() {
+  try {
+    if (!supabaseClient) return;
+    var r = await supabaseClient
+      .from(CONFIG.RECIPES_TABLE)
+      .select('id, title, author_name, origin, description, likes')
+      .order('likes', { ascending: false })
+      .limit(3);
+    if (r.error) throw r.error;
+    var recipes = r.data || [];
+    var grid    = document.getElementById('featuredGrid');
+    var empty   = document.getElementById('recipesEmpty');
+    if (recipes.length === 0) { if (empty) empty.style.display = 'block'; return; }
+    if (empty) empty.style.display = 'none';
+    grid.querySelectorAll('.recipe-card').forEach(function(el){ el.remove(); });
+    recipes.forEach(function(rec) {
+      var card = document.createElement('div');
+      card.className = 'recipe-card';
+      var rid     = String(rec.id);
+      var lkClass = likedRecipes.has(rid) ? ' liked' : '';
+      card.innerHTML =
+        '<div class="recipe-card-title">' + escHtml(rec.title) + '</div>' +
+        '<div class="recipe-card-origin">' + escHtml(rec.origin || 'Community Recipe') + '</div>' +
+        '<div class="recipe-card-desc">' + escHtml(rec.description || '') + '</div>' +
+        '<div class="recipe-card-author">By ' + escHtml(rec.author_name) + '</div>' +
+        '<div class="recipe-card-footer">' +
+          '<button class="recipe-like-btn' + lkClass + '" onclick="toggleRecipeLike(this,\'' + escHtml(rid) + '\')" aria-label="Like recipe">' +
+            '<span class="heart">♥</span> <span class="rlike-count">' + (rec.likes || 0) + '</span>' +
+          '</button>' +
+          '<button class="recipe-view-btn" onclick="alert(\'Full recipe viewer coming soon!\')">View Recipe →</button>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+    // Also update top bakers sidebar
+    loadTopBakers(recipes);
+  } catch(e) {
+    log('loadFeaturedRecipes non-fatal:', e);
+  }
+}
+
+// Top Bakers driven by recipe likes
+function loadTopBakers(recipes) {
+  try {
+    var container = document.getElementById('topBakersContainer');
+    if (!container || !recipes || recipes.length === 0) return;
+    container.innerHTML = '';
+    var colors = ['#6b3d24','#b86b2e','#c9922a','#3b2314'];
+    recipes.forEach(function(rec, i) {
+      var color = colors[i % colors.length];
+      var row   = document.createElement('div');
+      row.className = 'top-baker-row';
+      row.innerHTML =
+        '<div class="avatar" style="width:34px;height:34px;font-size:0.8rem;background:' + color + ';">' +
+          escHtml(rec.author_name.charAt(0).toUpperCase()) +
+        '</div>' +
+        '<div class="baker-name">' + escHtml(rec.author_name) + '</div>' +
+        '<span class="baker-score">♥ ' + (rec.likes || 0) + '</span>';
+      container.appendChild(row);
+    });
+  } catch(e) { log('loadTopBakers non-fatal:', e); }
+}
+
+// ===== RECIPE MODAL =====
+function openRecipeModal() {
+  try {
+    if (!CONFIG.currentUser) { openAuthModal(); return; }
+    document.getElementById('recipeModalOverlay').classList.add('active');
+    document.body.classList.add('modal-open');
+    setTimeout(function(){ document.getElementById('recipeTitle').focus(); }, 100);
+  } catch(e) {}
+}
+function closeRecipeModal() {
+  try {
+    document.getElementById('recipeModalOverlay').classList.remove('active');
+    document.body.classList.remove('modal-open');
+    var m = document.getElementById('recipeMsg');
+    m.className = 'recipe-msg'; m.textContent = '';
+  } catch(e) {}
+}
+document.getElementById('recipeModalOverlay').addEventListener('click', function(e) { if (e.target === this) closeRecipeModal(); });
+
+async function submitRecipe() {
+  try {
+    if (!supabaseClient || !CONFIG.currentUser) { openAuthModal(); return; }
+    var title    = (document.getElementById('recipeTitle').value        || '').trim();
+    var origin   = (document.getElementById('recipeOrigin').value       || '').trim();
+    var desc     = (document.getElementById('recipeDesc').value         || '').trim();
+    var ingr     = (document.getElementById('recipeIngredients').value  || '').trim();
+    var instr    = (document.getElementById('recipeInstructions').value || '').trim();
+    var btn      = document.getElementById('recipeSubmitBtn');
+    var msgEl    = document.getElementById('recipeMsg');
+    if (!title || !ingr || !instr) {
+      msgEl.textContent = 'Please fill in Title, Ingredients, and Instructions.';
+      msgEl.className   = 'recipe-msg error visible';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    var meta        = CONFIG.currentUser.user_metadata || {};
+    var authorName  = meta.full_name || meta.name || CONFIG.currentUser.email || 'Community Baker';
+    var r = await supabaseClient.from(CONFIG.RECIPES_TABLE).insert({
+      title:        title,
+      author_name:  authorName,
+      origin:       origin,
+      description:  desc,
+      ingredients:  ingr,
+      instructions: instr,
+      user_id:      CONFIG.currentUser.id,
+      likes:        0
+    });
+    if (r.error) throw r.error;
+    msgEl.textContent = '✦ Recipe submitted! It will appear in the featured section once it earns some love.';
+    msgEl.className   = 'recipe-msg success visible';
+    document.getElementById('recipeTitle').value        = '';
+    document.getElementById('recipeOrigin').value       = '';
+    document.getElementById('recipeDesc').value         = '';
+    document.getElementById('recipeIngredients').value  = '';
+    document.getElementById('recipeInstructions').value = '';
+    btn.disabled    = false;
+    btn.textContent = 'Submit Recipe';
+    setTimeout(function(){ closeRecipeModal(); loadFeaturedRecipes(); }, 2200);
+  } catch(e) {
+    console.error('[Poticas] submitRecipe:', e);
+    var b = document.getElementById('recipeSubmitBtn');
+    if (b) { b.disabled = false; b.textContent = 'Submit Recipe'; }
+    document.getElementById('recipeMsg').textContent = e.message || 'Submission failed.';
+    document.getElementById('recipeMsg').className   = 'recipe-msg error visible';
+  }
+}
+
+// ===== NOTIFY FORM =====
+async function submitNotify() {
+  try {
+    var emailEl   = document.getElementById('notifyEmail');
+    var notifyBtn = document.getElementById('notifyBtn');
+    var successEl = document.getElementById('notifySuccess');
+    var email     = (emailEl.value || '').trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailEl.style.borderColor = 'rgba(201,146,42,0.8)';
+      emailEl.focus();
+      setTimeout(function(){ emailEl.style.borderColor = ''; }, 1600);
+      return;
+    }
+    notifyBtn.disabled = true;
+    notifyBtn.textContent = '…';
+    if (supabaseClient) {
+      var r = await supabaseClient.from(CONFIG.NOTIFY_TABLE).upsert({ email: email }, { onConflict: 'email', ignoreDuplicates: true });
+      if (r.error && r.error.code !== '23505') throw r.error;
+    }
+    emailEl.style.display   = 'none';
+    notifyBtn.style.display = 'none';
+    successEl.style.display = 'block';
+  } catch(e) {
+    console.error('[Poticas] submitNotify:', e);
+    var nb = document.getElementById('notifyBtn');
+    if (nb) { nb.disabled = false; nb.textContent = 'Join Waitlist'; }
+    alert('Something went wrong. Please try again.');
+  }
+}
+
+// ===== MOBILE DRAWER =====
+function openDrawer() {
+  try {
+    document.getElementById('navDrawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('hamburgerBtn').classList.add('open');
+    document.getElementById('hamburgerBtn').setAttribute('aria-expanded','true');
+    document.body.classList.add('nav-open');
+    document.getElementById('navDrawer').setAttribute('aria-hidden','false');
+  } catch(e) {}
+}
+function closeDrawer() {
+  try {
+    document.getElementById('navDrawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('hamburgerBtn').classList.remove('open');
+    document.getElementById('hamburgerBtn').setAttribute('aria-expanded','false');
+    document.body.classList.remove('nav-open');
+    document.getElementById('navDrawer').setAttribute('aria-hidden','true');
+  } catch(e) {}
+}
+
+// ===== EASTER EGG 1 — ANNE KAPEL (logo 5×) =====
+(function initEasterEgg() {
+  try {
+    var lw = document.getElementById('logoWrap');
+    if (!lw) return;
+    lw.addEventListener('click', function() {
+      CONFIG.logoClickCount++;
+      clearTimeout(CONFIG.logoClickTimer);
+      CONFIG.logoClickTimer = setTimeout(function(){ CONFIG.logoClickCount = 0; }, CONFIG.LOGO_CLICK_WINDOW_MS);
+      if (CONFIG.logoClickCount >= CONFIG.LOGO_CLICKS_NEEDED) {
+        CONFIG.logoClickCount = 0;
+        clearTimeout(CONFIG.logoClickTimer);
+        openEasterEgg();
+      }
+    });
+  } catch(e) {}
+})();
+
+function openEasterEgg() {
+  try {
+    document.getElementById('eggOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('eggOverlay').querySelector('.egg-close').focus();
+  } catch(e) {}
+}
+function closeEasterEgg() {
+  try {
+    document.getElementById('eggOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  } catch(e) {}
+}
+document.getElementById('eggOverlay').addEventListener('click', function(e){ if (e.target === this) closeEasterEgg(); });
+
+// ===== EASTER EGG 2 — THE PAINTING (ornament 3×) =====
+(function initPaintingEgg() {
+  try {
+    var ornament = document.getElementById('featuredOrnament');
+    if (!ornament) return;
+    ornament.addEventListener('click', function() {
+      CONFIG.ornamentClickCount++;
+      clearTimeout(CONFIG.ornamentClickTimer);
+      CONFIG.ornamentClickTimer = setTimeout(function(){ CONFIG.ornamentClickCount = 0; }, CONFIG.ORNAMENT_CLICK_WINDOW_MS);
+      if (CONFIG.ornamentClickCount >= CONFIG.ORNAMENT_CLICKS_NEEDED) {
+        CONFIG.ornamentClickCount = 0;
+        clearTimeout(CONFIG.ornamentClickTimer);
+        openPainting();
+      }
+    });
+  } catch(e) {}
+})();
+
+function openPainting() {
+  try {
+    document.getElementById('paintingOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Brighten the background painting when egg is triggered
+    var bg = document.getElementById('featuredPaintingBg');
+    if (bg) bg.style.opacity = '0.45';
+  } catch(e) {}
+}
+function closePainting() {
+  try {
+    document.getElementById('paintingOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    var bg = document.getElementById('featuredPaintingBg');
+    if (bg) bg.style.opacity = '0.18';
+  } catch(e) {}
+}
+document.getElementById('paintingOverlay').addEventListener('click', function(e){ if (e.target === this) closePainting(); });
+
+// ===== XSS SANITIZER =====
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ===== GLOBAL KEYBOARD =====
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeEasterEgg();
+    closePainting();
+    closeDrawer();
+    closeAuthModal();
+    closeRecipeModal();
+  }
+});
+
+// ===== BOOT =====
+log('Poticas.com v3.0.0 — booting.');
+loadPosts(true);
+loadFeaturedRecipes();
+log('Poticas.com v3.0.0 — ready.');
+</script>
+
+</body>
+</html>
