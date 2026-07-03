@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Zengine (on behalf of poticas.com)
 // Author:      Vincent Gonzalez | © 2026 Zengine™ | www.zengine.site
-// Version:     v3.3.0
+// Version:     v3.4.0
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,11 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.4.0 (2026-07-03):
+//   - Baker's Guides row added to [006] LEARN section: 8 links to the new
+//     /guides/ pages (recipe, dough, rolling, walnuts, pan, troubleshooting,
+//     storing, potica-vs-povitica). CSS: .learn-sub + .guide-links pills.
 //
 // CHANGE LOG v3.3.0 (2026-07-03):
 //   - Community demoted to a tab: feed, featured recipes, recipe modal, and the
@@ -341,6 +346,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .learn-card-desc{font-family:var(--ff-accent);font-size:0.92rem;color:var(--clr-ink-muted);line-height:1.6;flex:1;}
 .learn-card-cta{font-family:var(--ff-accent);font-size:0.88rem;font-weight:600;color:var(--clr-caramel);letter-spacing:0.04em;}
 .learn-footnote{font-family:var(--ff-accent);font-style:italic;font-size:0.95rem;color:var(--clr-ink-muted);margin-top:18px;}
+.learn-sub{font-family:var(--ff-display);font-size:1.15rem;font-weight:700;color:var(--clr-walnut);margin:34px 0 14px;}
+.guide-links{display:flex;flex-wrap:wrap;gap:10px;}
+.guide-links a{display:inline-block;font-family:var(--ff-accent);font-size:0.92rem;background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:999px;padding:8px 18px;color:var(--clr-walnut-mid);transition:border-color var(--transition),color var(--transition);}
+.guide-links a:hover{border-color:var(--clr-caramel);color:var(--clr-caramel);}
 
 /* ===== [008] AFFILIATE SHOP ===== */
 .shop-section{padding:80px 0;background:var(--clr-walnut);position:relative;overflow:hidden;}
@@ -665,6 +674,17 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="learn-card-desc">The questions every first-time baker asks, answered with sources.</div>
         <div class="learn-card-cta">Read →</div>
       </a>
+    </div>
+    <h3 class="learn-sub reveal">Baker's Guides</h3>
+    <div class="guide-links reveal">
+      <a href="/guides/classic-walnut-potica-recipe.html">🌰 Walnut Potica Recipe</a>
+      <a href="/guides/potica-dough.html">🍞 The Dough, Explained</a>
+      <a href="/guides/how-to-roll-potica.html">🥖 How to Roll It</a>
+      <a href="/guides/grinding-walnuts-for-potica.html">⚙️ Grinding Walnuts</a>
+      <a href="/guides/potica-pan.html">🍩 The Potičnik (Pan)</a>
+      <a href="/guides/potica-troubleshooting.html">🔍 Troubleshooting</a>
+      <a href="/guides/storing-potica.html">📦 Storing &amp; Freezing</a>
+      <a href="/guides/potica-vs-povitica.html">🗺️ Potica vs. Povitica</a>
     </div>
     <p class="learn-footnote reveal">Or read the whole thing: <a href="/about-potica.html">About Potica — the definitive guide →</a></p>
   </div>
