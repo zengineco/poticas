@@ -3,9 +3,9 @@
 <!--
 // ===== WORKFLOW STACK =====
 // File:        community.html — the Community tab of poticas.com
-// Brand:       Zengine (on behalf of poticas.com)
-// Author:      Vincent Gonzalez | © 2026 Zengine™ | www.zengine.site
-// Version:     v1.0.0 (split out of index.html v3.2.0 — feed + featured recipes live here now)
+// Brand:       Poticas.com
+// Author:      Vincent Gonzalez
+// Version:     v1.1.0 (2026-07-03: studio branding removed; HOUSE RECIPE featured card — walnut guide + 5best2buy sourcing edition — replaces empty state, auto-yields to real community recipes)
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -913,7 +913,17 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <!-- Recipe cards populated by loadFeaturedRecipes() -->
     <div class="featured-grid" id="featuredGrid">
-      <p class="recipe-empty" id="recipesEmpty">No recipes yet — be the first to submit yours. ✦</p>
+      <!-- HOUSE RECIPE — static editorial card; yields automatically once real community recipes exist -->
+      <div class="recipe-card">
+        <div class="recipe-card-origin">✦ HOUSE RECIPE — FEATURED</div>
+        <div class="recipe-card-title">Classic Walnut Potica</div>
+        <div class="recipe-card-desc">The definitive filling of the definitive pastry — ground walnuts, honey, rum, and a dough rolled thin enough to spiral a dozen times per slice. Step-by-step, with every mistake pre-warned.</div>
+        <div class="recipe-card-author">By Poticas.com</div>
+        <div class="recipe-card-footer">
+          <a class="recipe-view-btn" style="text-decoration:none;" href="/guides/classic-walnut-potica-recipe.html">Read the Recipe →</a>
+          <a class="recipe-view-btn" style="text-decoration:none;" href="https://www.5best2buy.com/recipes/potica/" target="_blank" rel="noopener">Sourcing Edition ↗</a>
+        </div>
+      </div>
     </div>
 
     <div class="featured-cta reveal">
@@ -1037,7 +1047,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">© 2026 Poticas.com — All rights reserved.</p>
-      <p class="footer-watermark">www.zengine.site | © 2026 Zengine™</p>
       <p class="footer-ad-disclosure">
         This site is monetized through Google AdSense (ca-pub-8826956454892311) and affiliate marketing programs including Amazon Associates. Ads are served by Google and may use cookies to personalize content. We participate in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com. See our <a href="/privacy.html">Privacy Policy</a> for full details on data use and your rights.
       </p>
