@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.5.0
+// Version:     v3.5.1
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,11 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.5.1 (2026-07-03):
+//   - Order Potica cards: Goldbelly (affiliate rejected, links earned $0) replaced
+//     with Amazon-tagged Strawberry Hill povitica + variety search (tag=5best2buy-20,
+//     rel=sponsored) + honest non-affiliate Sunrise Bakery direct card.
 //
 // CHANGE LOG v3.5.0 (2026-07-03):
 //   - All prior studio branding removed site-wide (owner decision: Poticas.com stands
@@ -401,7 +406,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   z-index:1;
 }
 
-/* Order Potica — Goldbelly style cards */
+/* Order Potica — bakery order cards */
 .order-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
@@ -719,18 +724,24 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <div class="order-grid reveal">
       <div class="order-card">
         <span class="order-icon">🌰</span>
-        <div class="order-name">Artisan Walnut Potica</div>
-        <div class="order-source">VIA GOLDBELLY</div>
-        <div class="order-desc">Traditional Slovenian walnut roll, shipped fresh from a family bakery. The real thing.</div>
-        <!-- Replace href with your Goldbelly affiliate link once approved -->
-        <a class="btn-order-link" href="https://www.goldbelly.com/search?q=potica" target="_blank" rel="noopener noreferrer nofollow">Shop on Goldbelly →</a>
+        <div class="order-name">Hand-Rolled Walnut Povitica</div>
+        <div class="order-source">STRAWBERRY HILL — VIA AMAZON</div>
+        <div class="order-desc">Kansas City&#39;s Croatian classic, hand-rolled the old way and shipped in a gift box. The same pastry, the older name.</div>
+        <a class="btn-order-link" href="https://www.amazon.com/s?k=strawberry+hill+povitica+walnut&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Shop on Amazon →</a>
       </div>
       <div class="order-card">
         <span class="order-icon">🌸</span>
-        <div class="order-name">Poppy Seed Potica</div>
-        <div class="order-source">VIA GOLDBELLY</div>
-        <div class="order-desc">Silky, sweet, with the deep nutty flavor of the Slovenian countryside.</div>
-        <a class="btn-order-link" href="https://www.goldbelly.com/search?q=potica" target="_blank" rel="noopener noreferrer nofollow">Shop on Goldbelly →</a>
+        <div class="order-name">Poppy Seed &amp; More Varieties</div>
+        <div class="order-source">VIA AMAZON</div>
+        <div class="order-desc">Poppy seed, cream cheese, apple cinnamon — the wider povitica and nut roll shelf, delivered.</div>
+        <a class="btn-order-link" href="https://www.amazon.com/s?k=povitica+potica+nut+roll&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Shop on Amazon →</a>
+      </div>
+      <div class="order-card">
+        <span class="order-icon">⛏️</span>
+        <div class="order-name">Iron Range Potica</div>
+        <div class="order-source">SUNRISE BAKERY, HIBBING MN — SINCE 1913</div>
+        <div class="order-desc">The century-old Iron Range institution, still hand-stretching potica the thin way. Ships nationwide. Not an affiliate — just the real thing.</div>
+        <a class="btn-order-link" href="https://www.sunrisebakery.com/" target="_blank" rel="noopener noreferrer">Order from Sunrise →</a>
       </div>
       <div class="order-card">
         <span class="order-icon">📦</span>
