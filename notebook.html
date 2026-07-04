@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+// ===== WORKFLOW STACK =====
+// File:        notebook.html — The Potica Notebook (dated micro-entries)
+// Brand:       Poticas.com
+// Author:      Vincent Gonzalez
+// Version:     v1.0.0 (2026-07-04)
+// Purpose:     Freshness page. Every 5 days the potica-pulse GitHub Action
+//              publishes the next entry from data/notebook-bank.json between
+//              the NOTEBOOK:ENTRIES markers and bumps sitemap lastmod.
+//              Same run pings Supabase so the free-tier project never pauses.
+// ===========================
+-->
+<head>
+<meta name="google-adsense-account" content="ca-pub-8826956454892311">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="The Potica Notebook — short, dated notes from the world of potica: history, technique, bakeries, and traditions. A new entry every few days." />
+<meta name="keywords" content="potica notebook, potica news, potica facts, potica notes, slovenian baking" />
+<title>The Potica Notebook | Poticas.com</title>
+<link rel="canonical" href="https://www.poticas.com/notebook.html" />
+<meta property="og:title" content="The Potica Notebook | Poticas.com" />
+<meta property="og:description" content="Short, dated notes from the world of potica — history, technique, bakeries, traditions." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.poticas.com/notebook.html" />
+<meta property="og:image" content="https://www.poticas.com/assets/icon.png" />
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Blog",
+ "name": "The Potica Notebook",
+ "url": "https://www.poticas.com/notebook.html",
+ "description": "Short, dated notes from the world of potica.",
+ "publisher": { "@type": "Organization", "name": "Poticas.com", "url": "https://www.poticas.com" }
+}
+</script>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QB3MRRGK3S"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-QB3MRRGK3S', { anonymize_ip: true });
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌰</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --clr-bg:        #f5efe4;
+  --clr-bg-alt:    #ede5d4;
+  --clr-surface:   #fff8ee;
+  --clr-walnut:    #3b2314;
+  --clr-walnut-mid:#6b3d24;
+  --clr-caramel:   #b86b2e;
+  --clr-gold:      #c9922a;
+  --clr-cream:     #fdf6e9;
+  --clr-ink:       #2a1a0e;
+  --clr-ink-muted: #7a5c44;
+  --clr-divider:   #d4c4a8;
+  --ff-display: 'Playfair Display', Georgia, serif;
+  --ff-body:    'Lora', 'Times New Roman', serif;
+  --ff-accent:  'Cormorant Garamond', Georgia, serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--clr-bg);color:var(--clr-ink);font-family:var(--ff-body);line-height:1.8;min-height:100vh;}
+a{color:var(--clr-caramel);text-decoration:none;}
+a:hover{color:var(--clr-walnut);text-decoration:underline;}
+.site-header{background:rgba(245,239,228,0.96);border-bottom:1.5px solid var(--clr-divider);padding:14px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.header-inner{max-width:900px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo-text{font-family:var(--ff-display);font-size:1.5rem;font-weight:900;color:var(--clr-walnut);letter-spacing:-0.02em;}
+.logo-text span{color:var(--clr-caramel);}
+.header-nav{display:flex;gap:6px;}
+.header-nav a{font-family:var(--ff-accent);font-size:0.95rem;color:var(--clr-walnut-mid);padding:5px 12px;border-radius:4px;transition:background 0.2s,color 0.2s;}
+.header-nav a:hover{background:var(--clr-walnut);color:var(--clr-cream);text-decoration:none;}
+.header-nav .cta{background:var(--clr-caramel);color:var(--clr-cream) !important;/* declared: CTA only */border-radius:999px;padding:6px 18px;}
+.header-nav .cta:hover{background:var(--clr-walnut);}
+.article-hero{background:var(--clr-walnut);padding:56px 24px 48px;text-align:center;position:relative;overflow:hidden;}
+.article-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(201,146,42,0.18) 0%,transparent 70%);pointer-events:none;}
+.hero-breadcrumb{font-family:var(--ff-accent);font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(253,246,233,0.5);margin-bottom:16px;position:relative;z-index:1;}
+.hero-breadcrumb a{color:var(--clr-gold);}
+.article-hero h1{font-family:var(--ff-display);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:900;color:var(--clr-cream);line-height:1.12;letter-spacing:-0.02em;margin-bottom:14px;position:relative;z-index:1;}
+.article-hero h1 em{color:var(--clr-gold);font-style:italic;}
+.hero-summary{font-family:var(--ff-accent);font-size:1.08rem;font-style:italic;color:rgba(253,246,233,0.8);max-width:600px;margin:0 auto;line-height:1.7;position:relative;z-index:1;}
+.nb-wrap{max-width:720px;margin:0 auto;padding:52px 24px 72px;}
+.nb-entry{background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:12px;padding:26px 26px 20px;margin-bottom:22px;}
+.nb-date{font-family:var(--ff-accent);font-size:0.8rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--clr-caramel);margin-bottom:6px;}
+.nb-entry h2{font-family:var(--ff-display);font-size:1.25rem;font-weight:700;color:var(--clr-walnut);line-height:1.3;margin-bottom:10px;}
+.nb-entry p{font-size:0.98rem;line-height:1.8;margin-bottom:10px;}
+.nb-src{font-family:var(--ff-accent);font-size:0.88rem;color:var(--clr-ink-muted);}
+.nb-foot{font-family:var(--ff-accent);font-style:italic;font-size:0.92rem;color:var(--clr-ink-muted);text-align:center;margin-top:34px;}
+.site-footer{background:var(--clr-walnut);padding:28px 24px;text-align:center;font-family:var(--ff-accent);font-size:0.82rem;color:rgba(253,246,233,0.45);letter-spacing:0.04em;}
+.site-footer a{color:rgba(253,246,233,0.55);}
+.site-footer a:hover{color:var(--clr-gold);}
+@media(max-width:600px){.header-nav .hide-mobile{display:none;}.article-hero{padding:40px 20px 34px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo-text">potica<span>s</span></a>
+    <nav class="header-nav">
+      <a href="/#learn">Learn</a>
+      <a href="/#shop" class="hide-mobile">Shop</a>
+      <a href="/community.html">Community</a>
+      <a href="/about-potica.html" class="cta hide-mobile">About Potica</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <p class="hero-breadcrumb"><a href="/">Poticas.com</a> &nbsp;›&nbsp; The Notebook</p>
+  <h1>The Potica <em>Notebook</em></h1>
+  <p class="hero-summary">Short, dated notes from the world of potica — history, technique, bakeries, and traditions. A new entry every few days.</p>
+</div>
+
+<div class="nb-wrap">
+<!-- NOTEBOOK:ENTRIES:START -->
+<article class="nb-entry">
+  <p class="nb-date">4 July 2026</p>
+  <h2>Only five fillings are legally 'Slovenska potica'</h2>
+  <p>Under EU Regulation 2021/656, a potica sold as protected "Slovenska potica" may contain exactly five fillings: walnut, walnut with raisins, poppy seed, cottage cheese, or tarragon. Everything else is delicious — but it isn't the protected article. <a href="/about-potica.html#history">The full specification →</a></p>
+</article>
+<!-- NOTEBOOK:ENTRIES:END -->
+  <p class="nb-foot">Want the long-form version? Start with <a href="/about-potica.html">About Potica</a> or the <a href="/#learn">Baker's Guides</a>.</p>
+</div>
+
+<footer class="site-footer">
+  © 2026 Poticas.com — All rights reserved. &nbsp;|&nbsp;
+  <a href="/privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+  <a href="/terms.html">Terms of Service</a> &nbsp;|&nbsp;
+  <a href="/">← Poticas.com</a>
+</footer>
+
+</body>
+</html>

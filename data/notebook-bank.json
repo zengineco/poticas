@@ -1,0 +1,114 @@
+{
+  "comment": "Potica Notebook entry bank. potica-pulse.yml publishes entries[nextIndex] into notebook.html every 5 days, then increments nextIndex. Every entry was fact-checked 2026-07-03/04 against the sources cited on about-potica.html and the guides. Refill by appending entries — never edit published ones here.",
+  "nextIndex": 1,
+  "entries": [
+    {
+      "title": "Only five fillings are legally 'Slovenska potica'",
+      "body": "Under EU Regulation 2021/656, a potica sold as protected \"Slovenska potica\" may contain exactly five fillings: walnut, walnut with raisins, poppy seed, cottage cheese, or tarragon. Everything else is delicious — but it isn't the protected article. <a href=\"/about-potica.html#history\">The full specification →</a>"
+    },
+    {
+      "title": "Potica's first appearance in print was a complaint",
+      "body": "The earliest written record of potica comes from Primož Trubar's 1550 <em>Catechismus</em> — the first printed book in the Slovenian language — where the reformer disapproved of women offering potice as votive gifts. The pastry was already so embedded in folk life that it made it into theology. <a href=\"/about-potica.html#history\">More →</a>"
+    },
+    {
+      "title": "1689: the first full description",
+      "body": "Janez Vajkard Valvasor's encyclopedic <em>Glory of the Duchy of Carniola</em> (1689) gave the first detailed description of potica — thin dough coated with honey and walnuts, tightly rolled — a recipe that mirrors the modern walnut potica almost exactly, three and a half centuries later. <a href=\"/about-potica.html#history\">More →</a>"
+    },
+    {
+      "title": "The hole in the pan is engineering, not decoration",
+      "body": "The potičnik's central cone turns one of the densest loaves in home baking into a ring, so oven heat attacks from the inside and the outside at once. No cold core, no doughy centre. The EU spec requires the pan for protected Slovenska potica — minimum 14 cm across. <a href=\"/guides/potica-pan.html\">The pan guide →</a>"
+    },
+    {
+      "title": "The newspaper test",
+      "body": "In potica and povitica kitchens on two continents, the folk benchmark for dough is the same: stretched thin enough to read a newspaper through. Iron Range grandmothers held it up to the light; Kansas City's Croatian bakers still describe it the same way. <a href=\"/guides/how-to-roll-potica.html\">How to get there →</a>"
+    },
+    {
+      "title": "Potica is better on day two — plan for it",
+      "body": "Fresh from the oven is the wrong day to judge a potica. Overnight, moisture migrates from the filling into the crumb and the flavours knit. Bakers deliberately bake a day ahead. If your schedule allows the rest day, take it. <a href=\"/guides/storing-potica.html\">Storing guide →</a>"
+    },
+    {
+      "title": "The Iron Range's potica institution was founded by a Roman",
+      "body": "Sunrise Bakery in Hibbing, Minnesota — hand-rolling potica since 1913 — was founded by Giulio Forti, a scratch baker from Rome, Italy. A century of Slovenian-American holiday tables supplied by an Italian founder: that is how thoroughly the Iron Range's food traditions intermarried. <a href=\"/guides/potica-in-america.html\">Potica in America →</a>",
+      "src": {
+        "label": "Sunrise Bakery — About",
+        "url": "https://www.sunrisebakery.com/aboutus/"
+      }
+    },
+    {
+      "title": "The Three P's",
+      "body": "On Minnesota's Iron Range, three miners' foods crossed every ethnic line and became the region's shared table: potica (Slovenian), pasties (Cornish), and porketta (Italian). You don't have to be Slovenian to bake potica on the Range — it stopped being ethnic food and became Ranger food. <a href=\"/guides/potica-in-america.html\">The full story →</a>"
+    },
+    {
+      "title": "Same pastry, older name",
+      "body": "Kansas City's Croatian community never shortened the word: there it is <em>povitica</em>, and the Strawberry Hill Baking Company has made it commercially since 1984 — a fourth generation of the family bakes it today. In Slovenia the same word wore down to <em>potica</em>. <a href=\"/guides/potica-vs-povitica.html\">The naming story →</a>"
+    },
+    {
+      "title": "The name is the instruction",
+      "body": "Potica comes from the Slovenian verb <em>poviti</em> — to wrap, to roll up. The older form <em>povitica</em> contracted as the pastry became Slovenia's national dish. Everything the pastry is — thin dough, filling to the edges, the tight spiral — lives inside that one verb. <a href=\"/about-potica.html#etymology\">Etymology →</a>"
+    },
+    {
+      "title": "Potica has been served in the United States Senate",
+      "body": "Senator Amy Klobuchar of Minnesota — Slovenian on her Iron Range side — has served potica to colleagues in Washington, where it reportedly won fans on both sides of the aisle. From a miner's steamer trunk to the Capitol in about a century. <a href=\"/guides/potica-in-america.html\">More →</a>",
+      "src": {
+        "label": "Twin Cities Business, \"The Potica Invasion\"",
+        "url": "https://tcbmag.com/the-potica-invasion/"
+      }
+    },
+    {
+      "title": "The cookbook written for readers with no grandmother left to ask",
+      "body": "<em>Woman's Glory — The Kitchen</em>, published by the Slovenian Women's Union of America for its silver anniversary (1926–1951), was compiled — in editor Albina Novak's words — as an \"instructor\" for women who wished to make \"dishes for which their mothers have always been famous.\" A survival document disguised as a cookbook. <a href=\"/guides/potica-in-america.html\">More →</a>"
+    },
+    {
+      "title": "Whole poppy seeds taste like almost nothing",
+      "body": "They are sealed capsules — baked whole, they stay gritty and bland. Ground, they release their oils and become the dark, fragrant paste the pastry is named for. If a poppy seed roll ever disappointed you, this step was probably skipped. <a href=\"/guides/poppy-seed-potica.html\">Poppy seed potica →</a>"
+    },
+    {
+      "title": "Toast the walnuts. Then wait.",
+      "body": "Eight minutes at 160 °C deepens walnut flavour dramatically — but grind them warm and they smear into oily paste. Cold, brittle nuts shatter cleanly into the coarse-sand texture a potica filling wants. The waiting is part of the recipe. <a href=\"/guides/grinding-walnuts-for-potica.html\">Grinding guide →</a>"
+    },
+    {
+      "title": "The tarragon one is not a novelty",
+      "body": "Pehtranova potica — sweet tarragon potica — is one of the five EU-protected fillings and a long-standing Easter bake, cherished especially around Novo mesto in Dolenjska. Sweet herb pastry sounds like a modern stunt; it is one of the oldest ideas in the repertoire. <a href=\"/guides/tarragon-potica.html\">Tarragon potica →</a>"
+    },
+    {
+      "title": "December 2021: national heritage status",
+      "body": "Potica-making entered Slovenia's national register of intangible cultural heritage in December 2021 — the same year \"Slovenska potica\" received EU Traditional Speciality Guaranteed protection. Legal recognition, twice over, for a farmhouse pastry. <a href=\"/about-potica.html#history\">The history →</a>",
+      "src": {
+        "label": "Total Slovenia News",
+        "url": "https://www.total-slovenia-news.com/made-in-slovenia/9353-three-additions-to-slovenia-s-register-of-intangible-cultural-heritage"
+      }
+    },
+    {
+      "title": "Three to four turns, by law",
+      "body": "The EU specification for protected Slovenska potica requires at least three to four full turns of dough and filling in the finished loaf — which is only physically possible when the dough is rolled genuinely thin. The spiral count is the honesty meter. <a href=\"/guides/how-to-roll-potica.html\">Rolling guide →</a>"
+    },
+    {
+      "title": "The two-second test that predicts your whole bake",
+      "body": "Pinch off a piece of kneaded dough and stretch it slowly. If it forms a thin translucent membrane before tearing — the windowpane — your gluten will survive being rolled to 3 mm. If it tears immediately, keep kneading. Two seconds now saves an hour of frustration later. <a href=\"/guides/potica-dough.html\">The dough, explained →</a>"
+    },
+    {
+      "title": "Orehnjača and makovnjača",
+      "body": "Croatia names the roll for its filling: <em>orehnjača</em> from <em>oreh</em> (walnut), <em>makovnjača</em> from <em>mak</em> (poppy). Same family as potica and povitica — the name on the table tells you which village the recipe walked out of. <a href=\"/guides/potica-vs-povitica.html\">The family tree →</a>"
+    },
+    {
+      "title": "The cousins: bejgli and makowiec",
+      "body": "Hungary rolls poppy and walnut <em>bejgli</em> at Christmas; Poland bakes <em>makowiec</em>. Both are branches of the same Central European rolled-yeast-bread family as potica — overlapping cousins, each certain theirs is the original. <a href=\"/guides/potica-vs-povitica.html\">Compare them →</a>"
+    },
+    {
+      "title": "\"One village, one potica\"",
+      "body": "The Slovenian folk proverb captures the pastry's real taxonomy: estimates run to dozens upon dozens of distinct regional varieties — sweet, savory, walnut, tarragon, even crackling-filled. The walnut potica you know is the ambassador, not the whole country. <a href=\"/about-potica.html#varieties\">The varieties →</a>"
+    },
+    {
+      "title": "Freeze it by the slice",
+      "body": "Potica freezes exceptionally well — its density is an asset. The connoisseur's move: freeze individual slices on a tray, bag them, and pull one at a time with coffee for the rest of winter. Thaw wrapped, so the condensation lands on the wrapper instead of the crumb. <a href=\"/guides/storing-potica.html\">Storing guide →</a>"
+    },
+    {
+      "title": "Revna potica — the poor man's roll",
+      "body": "Not every potica was a celebration of abundance. The <em>revna</em> (poor) potica stretched scarce filling across the same devoted dough — proof that the form mattered as much as the fortune behind it. The spiral was the point. <a href=\"/about-potica.html#v-poor\">More varieties →</a>"
+    },
+    {
+      "title": "Potica once paid taxes",
+      "body": "Historical records from Valvasor's era indicate a potica was sometimes accepted as partial payment of taxes in Carniola. A pastry with enough standing to settle debts to the state — in the 17th century. <a href=\"/about-potica.html#history\">The history →</a>"
+    }
+  ]
+}

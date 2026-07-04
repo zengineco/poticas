@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.5.1
+// Version:     v3.5.2
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,12 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.5.2 (2026-07-04):
+//   - POTICA PULSE machinery: /notebook.html (dated micro-entries) + notebook
+//     pill in Learn section. GitHub Action every 5 days: Supabase keepalive ping
+//     (free tier pauses at 7 idle days) + publishes next fact-checked entry from
+//     data/notebook-bank.json (24 banked) + sitemap lastmod bump.
 //
 // CHANGE LOG v3.5.1 (2026-07-03):
 //   - Order Potica cards: Goldbelly (affiliate rejected, links earned $0) replaced
@@ -699,6 +705,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <a href="/guides/poppy-seed-potica.html">🌸 Poppy Seed Potica</a>
       <a href="/guides/tarragon-potica.html">🌿 Tarragon Potica</a>
       <a href="/guides/potica-in-america.html">🇺🇸 Potica in America</a>
+      <a href="/notebook.html">🗒️ The Potica Notebook</a>
     </div>
     <p class="learn-footnote reveal">Or read the whole thing: <a href="/about-potica.html">About Potica — the definitive guide →</a></p>
   </div>

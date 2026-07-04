@@ -1,0 +1,57 @@
+# ============================================================
+# POTICA PULSE v1.0.0
+# Runs every 5 days (days 1,6,11,16,21,26,31 — max gap 6 days,
+# always under Supabase's 7-day free-tier pause threshold).
+#
+# Job 1: keepalive — one lightweight REST read against the
+#         Supabase project so the community feed's database
+#         never auto-pauses. (Anon key is public by design;
+#         it's the same key shipped in the site's HTML.)
+# Job 2: notebook — publishes the next fact-checked entry from
+#         data/notebook-bank.json onto /notebook.html and bumps
+#         the sitemap lastmod, then commits. The push triggers
+#         a GitHub Pages rebuild, so the site shows fresh,
+#         real, dated content every 5 days.
+#
+# Manual run: Actions tab -> POTICA PULSE -> Run workflow.
+# When the bank runs dry the notebook step publishes nothing
+# and the run still succeeds (keepalive always fires).
+# ============================================================
+name: POTICA PULSE
+
+on:
+  schedule:
+    - cron: '17 13 */5 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Supabase keepalive ping
+        run: |
+          curl -s -o /dev/null -w "supabase keepalive HTTP %{http_code}\n" \
+            "https://ihclxurachkewtgnrldc.supabase.co/rest/v1/posts?select=id&limit=1" \
+            -H "apikey: sb_publishable_O3yozPaOxtyu0fAHKhXzIQ_nlTmVFlL" \
+            -H "Authorization: Bearer sb_publishable_O3yozPaOxtyu0fAHKhXzIQ_nlTmVFlL" || true
+
+      - name: Publish next notebook entry
+        run: node scripts/notebook-tick.js
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "potica-pulse"
+          git config user.email "actions@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add notebook.html data/notebook-bank.json sitemap.xml
+            git commit -m "Notebook: new entry (potica-pulse)"
+            git push
+          else
+            echo "No changes to publish."
+          fi
