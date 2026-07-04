@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.6.1
+// Version:     v3.6.2
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,13 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.6.2 (2026-07-04):
+//   - Voice pass (owner call: independently run, no "we"): shop copy first person
+//     (bakers I trust / I'll reach out), guides' editorial our/we -> neutral,
+//     about.html rewritten short + first person — corrections log and standards
+//     listicle REMOVED (kept internal; Zenodo carries the academic weight).
+//     Legal pages keep their defined "we" (= Vincent Gonzalez, per privacy.html).
 //
 // CHANGE LOG v3.6.1 (2026-07-04):
 //   - E-E-A-T: /about.html (named author, editorial standards, PUBLIC corrections
@@ -741,7 +748,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <!-- ORDER POTICA subsection -->
     <h3 class="shop-subsection-title reveal">🥐 Order Potica</h3>
-    <p class="shop-subsection-sub reveal">While our own kitchen gets ready, here are the bakers we trust.</p>
+    <p class="shop-subsection-sub reveal">While my own kitchen gets ready, here are the bakers I trust.</p>
 
     <div class="order-grid reveal">
       <div class="order-card">
@@ -767,9 +774,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
       <div class="order-card">
         <span class="order-icon">📦</span>
-        <div class="order-name">Our Own Shop</div>
+        <div class="order-name">The Poticas Kitchen</div>
         <div class="order-source">POTICAS.COM — COMING SOON</div>
-        <div class="order-desc">We're getting our kitchen ready. Join the waitlist below and we'll reach out personally.</div>
+        <div class="order-desc">I'm getting the kitchen ready. Join the waitlist below and I'll reach out personally.</div>
         <a class="btn-order-link" href="#" onclick="document.getElementById('notifyEmail').focus();return false;">Join Waitlist →</a>
       </div>
     </div>
@@ -833,13 +840,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <!-- Waitlist -->
     <div class="shop-notify-wrap reveal">
       <p style="font-family:var(--ff-accent);font-style:italic;color:rgba(253,246,233,0.6);margin-bottom:20px;font-size:0.95rem;">
-        Join the waitlist — we'll reach out personally when our kitchen ships.
+        Join the waitlist — I'll reach out personally when the kitchen ships.
       </p>
       <div class="shop-notify-form">
         <input type="email" class="notify-input" id="notifyEmail" placeholder="your@email.com" aria-label="Email for shop notification" />
         <button class="btn-notify" id="notifyBtn" onclick="submitNotify()">Join Waitlist</button>
       </div>
-      <p class="notify-success" id="notifySuccess">🍞 You're on the list! We'll reach out personally.</p>
+      <p class="notify-success" id="notifySuccess">🍞 You're on the list! I'll reach out personally.</p>
     </div>
   </div>
 </section>
