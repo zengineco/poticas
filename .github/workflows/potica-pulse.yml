@@ -44,6 +44,11 @@ jobs:
       - name: Publish next notebook entry
         run: node scripts/notebook-tick.js
 
+      - name: IndexNow ping (Bing/Yandex instant indexing)
+        run: |
+          curl -s -o /dev/null -w "indexnow HTTP %{http_code}\n" \
+            "https://api.indexnow.org/indexnow?url=https://www.poticas.com/notebook.html&key=a7c3e9f1b5d24068a1f4c8e2d6b30957" || true
+
       - name: Commit and push if changed
         run: |
           git config user.name "potica-pulse"
