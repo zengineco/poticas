@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.7.1
+// Version:     v3.7.2
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,12 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.7.2 (2026-07-05):
+//   - Shop grids balanced: order cards 2x2 (was 3+1), pantry cards 3x3 (was 4x2+1);
+//     tablet 2-col, mobile 1-col fallbacks.
+//   - Backlinks to 5best2buy's /traditional-nut-roll/ field-guide pillar added on
+//     potica-vs-povitica + potica-in-america (via generator).
 //
 // CHANGE LOG v3.7.1 (2026-07-05):
 //   - ADSENSE SWEEP: consent-gated ad loader now on ALL content pages (14 guides,
@@ -449,9 +455,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Order Potica — bakery order cards */
 .order-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  grid-template-columns:repeat(2,1fr);
   gap:18px;
-  margin-bottom:40px;
+  max-width:760px;
+  margin:0 auto 40px;
   position:relative;
   z-index:1;
 }
@@ -481,7 +488,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Baker's Pantry — ingredient/tool affiliate grid */
 .pantry-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  grid-template-columns:repeat(3,1fr);
   gap:16px;
   position:relative;
   z-index:1;
@@ -572,7 +579,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* RESPONSIVE */
 @media(max-width:768px){.site-nav{display:none;}.hamburger{display:flex;}.hero{padding:64px 0 56px;}}
-@media(max-width:600px){.shop-notify-form{flex-direction:column;}.notify-input{width:100%;}.auth-btn .auth-label{display:none;}.featured-grid{grid-template-columns:1fr;}.order-grid{grid-template-columns:1fr;}}
+@media(max-width:768px){.pantry-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.shop-notify-form{flex-direction:column;}.notify-input{width:100%;}.auth-btn .auth-label{display:none;}.featured-grid{grid-template-columns:1fr;}.order-grid{grid-template-columns:1fr;}.pantry-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
