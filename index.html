@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.7.0
+// Version:     v3.7.1
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,14 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.7.1 (2026-07-05):
+//   - ADSENSE SWEEP: consent-gated ad loader now on ALL content pages (14 guides,
+//     kitchen, notebook, about, about-potica) — was only index+community. Shares
+//     the poticas_gdpr key: one Accept covers the site; no consent, no script.
+//   - about-potica: adsense meta added.
+//   - Pantry: 5Best2Buy card -> potica sourcing edition URL; new Pots & Pans card
+//     (kitchen.html was footer/teaser-only — now visible in the grid).
 //
 // CHANGE LOG v3.7.0 (2026-07-04):
 //   - POTS & PANS: /kitchen.html — 60-item equipment + ingredient catalog in 8
@@ -839,8 +847,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="pantry-card">
         <span class="pantry-icon">🛒</span>
         <div class="pantry-name">5Best2Buy</div>
-        <div class="pantry-brand">SPECIALTY STORE</div>
-        <a class="btn-pantry-link" href="https://5best2buy.com" target="_blank" rel="noopener noreferrer">Hard-to-find goods big retailers don't carry →</a>
+        <div class="pantry-brand">THE POTICA SOURCING EDITION</div>
+        <a class="btn-pantry-link" href="https://www.5best2buy.com/recipes/potica/" target="_blank" rel="noopener noreferrer">The recipe, with every ingredient hunted →</a>
+      </div>
+      <div class="pantry-card">
+        <span class="pantry-icon">🍳</span>
+        <div class="pantry-name">Pots &amp; Pans</div>
+        <div class="pantry-brand">THE WHOLE KITCHEN — 64 ITEMS</div>
+        <a class="btn-pantry-link" href="/kitchen.html">Every pot, pan &amp; tool, listed →</a>
       </div>
     </div>
 
