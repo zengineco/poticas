@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+// ===== WORKFLOW STACK =====
+// File:        kitchen.html — Pots & Pans: the complete potica equipment + ingredients catalog
+// Brand:       Poticas.com
+// Author:      Vincent Gonzalez
+// Version:     v1.0.0 (2026-07-04)
+// Purpose:     Commercial catalog page. Two tiers, honestly labeled:
+//              ECONOMY = Amazon search links (tag=5best2buy-20, rel=sponsored)
+//              WORTH THE HUNT = sister site 5best2buy's live maker shelves
+//              Amazon search links (not ASINs) so nothing ever dead-ends.
+// ===========================
+-->
+<head>
+<meta name="google-adsense-account" content="ca-pub-8826956454892311">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Every pot, pan, and tool for baking potica — tube pans and potičnik substitutes, rolling cloths, mixers, nut grinders, thermometers, storage, and the ingredient shelf. Economy picks and premium maker picks, labeled." />
+<meta name="keywords" content="potica baking equipment, potica pan, nut roll baking supplies, potica kitchen tools, povitica equipment, bread baking supplies" />
+<title>Pots &amp; Pans — The Whole Potica Kitchen | Poticas.com</title>
+<link rel="canonical" href="https://www.poticas.com/kitchen.html" />
+<meta property="og:title" content="Pots &amp; Pans — The Whole Potica Kitchen" />
+<meta property="og:description" content="Every tool the bake actually uses, from the potičnik to the flour-sack towel — economy and premium picks, honestly labeled." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.poticas.com/kitchen.html" />
+<meta property="og:image" content="https://www.poticas.com/assets/icon.png" />
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "CollectionPage",
+ "name": "Pots & Pans — The Whole Potica Kitchen",
+ "url": "https://www.poticas.com/kitchen.html",
+ "description": "The complete equipment and ingredient list for baking potica, organized by task.",
+ "isPartOf": { "@type": "WebSite", "name": "Poticas.com", "url": "https://www.poticas.com" }
+}
+</script>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QB3MRRGK3S"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-QB3MRRGK3S', { anonymize_ip: true });
+</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌰</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --clr-bg:#f5efe4; --clr-bg-alt:#ede5d4; --clr-surface:#fff8ee; --clr-walnut:#3b2314;
+  --clr-walnut-mid:#6b3d24; --clr-caramel:#b86b2e; --clr-gold:#c9922a; --clr-cream:#fdf6e9;
+  --clr-ink:#2a1a0e; --clr-ink-muted:#7a5c44; --clr-divider:#d4c4a8;
+  --ff-display:'Playfair Display',Georgia,serif; --ff-body:'Lora','Times New Roman',serif;
+  --ff-accent:'Cormorant Garamond',Georgia,serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--clr-bg);color:var(--clr-ink);font-family:var(--ff-body);line-height:1.8;min-height:100vh;}
+a{color:var(--clr-caramel);text-decoration:none;}
+a:hover{color:var(--clr-walnut);text-decoration:underline;}
+.site-header{background:rgba(245,239,228,0.96);border-bottom:1.5px solid var(--clr-divider);padding:14px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.header-inner{max-width:900px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo-text{font-family:var(--ff-display);font-size:1.5rem;font-weight:900;color:var(--clr-walnut);letter-spacing:-0.02em;}
+.logo-text span{color:var(--clr-caramel);}
+.header-nav{display:flex;gap:6px;}
+.header-nav a{font-family:var(--ff-accent);font-size:0.95rem;color:var(--clr-walnut-mid);padding:5px 12px;border-radius:4px;transition:background 0.2s,color 0.2s;}
+.header-nav a:hover{background:var(--clr-walnut);color:var(--clr-cream);text-decoration:none;}
+.article-hero{background:var(--clr-walnut);padding:56px 24px 48px;text-align:center;position:relative;overflow:hidden;}
+.article-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(201,146,42,0.18) 0%,transparent 70%);pointer-events:none;}
+.hero-breadcrumb{font-family:var(--ff-accent);font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(253,246,233,0.5);margin-bottom:16px;position:relative;z-index:1;}
+.hero-breadcrumb a{color:var(--clr-gold);}
+.article-hero h1{font-family:var(--ff-display);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:900;color:var(--clr-cream);line-height:1.12;margin-bottom:14px;position:relative;z-index:1;}
+.article-hero h1 em{color:var(--clr-gold);font-style:italic;}
+.hero-summary{font-family:var(--ff-accent);font-size:1.05rem;font-style:italic;color:rgba(253,246,233,0.8);max-width:620px;margin:0 auto;line-height:1.7;position:relative;z-index:1;}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px 72px;}
+.disclosure{font-family:var(--ff-accent);font-size:0.88rem;color:var(--clr-ink-muted);background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:10px;padding:14px 18px;margin-bottom:36px;line-height:1.7;}
+.kit-section h2{font-family:var(--ff-display);font-size:1.45rem;font-weight:700;color:var(--clr-walnut);margin:42px 0 6px;padding-top:18px;border-top:1px solid var(--clr-divider);}
+.kit-section h2:first-of-type{margin-top:0;border-top:none;padding-top:0;}
+.kit-sub{font-family:var(--ff-accent);font-style:italic;color:var(--clr-ink-muted);font-size:0.95rem;margin-bottom:16px;}
+.kit-item{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--clr-divider);padding:12px 0;flex-wrap:wrap;}
+.kit-item:last-child{border-bottom:none;}
+.kit-info{flex:1;min-width:240px;}
+.kit-name{font-family:var(--ff-display);font-size:1.02rem;font-weight:700;color:var(--clr-walnut);}
+.kit-why{font-family:var(--ff-accent);font-size:0.9rem;color:var(--clr-ink-muted);line-height:1.55;}
+.kit-why a{color:var(--clr-caramel);}
+.kit-links{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+.btn-econ{display:inline-block;font-family:var(--ff-accent);font-size:0.82rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;background:var(--clr-walnut);color:var(--clr-cream);border-radius:999px;padding:7px 16px;white-space:nowrap;transition:background 0.2s;}
+.btn-econ:hover{background:var(--clr-caramel);color:var(--clr-cream);text-decoration:none;}
+.btn-wth{display:inline-block;font-family:var(--ff-accent);font-size:0.82rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;background:var(--clr-gold);color:var(--clr-walnut);border-radius:999px;padding:7px 16px;white-space:nowrap;transition:background 0.2s;}
+.btn-wth:hover{background:var(--clr-caramel);color:var(--clr-cream);text-decoration:none;}
+.toc{background:var(--clr-surface);border:1.5px solid var(--clr-divider);border-radius:12px;padding:18px 22px;margin-bottom:8px;font-family:var(--ff-accent);font-size:0.95rem;line-height:2;}
+.site-footer{background:var(--clr-walnut);padding:28px 24px;text-align:center;font-family:var(--ff-accent);font-size:0.82rem;color:rgba(253,246,233,0.45);letter-spacing:0.04em;}
+.site-footer a{color:rgba(253,246,233,0.55);}
+.site-footer a:hover{color:var(--clr-gold);}
+@media(max-width:600px){.header-nav .hide-mobile{display:none;}.article-hero{padding:40px 20px 34px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo-text">potica<span>s</span></a>
+    <nav class="header-nav">
+      <a href="/#learn">Learn</a>
+      <a href="/#shop" class="hide-mobile">Shop</a>
+      <a href="/community.html">Community</a>
+      <a href="/about-potica.html" class="hide-mobile">About Potica</a>
+    </nav>
+  </div>
+</header>
+
+<div class="article-hero">
+  <p class="hero-breadcrumb"><a href="/">Poticas.com</a> &nbsp;›&nbsp; <a href="/#shop">Shop</a> &nbsp;›&nbsp; Pots &amp; Pans</p>
+  <h1>Pots &amp; Pans: <em>The Whole Potica Kitchen</em></h1>
+  <p class="hero-summary">Every tool the bake actually uses, from the potičnik to the flour-sack towel. Two tiers, honestly labeled: economy picks and hunted-down maker picks.</p>
+</div>
+
+<div class="wrap">
+  <p class="disclosure"><strong>How the links work:</strong> <span style="font-weight:700;">ECONOMY</span> buttons go to Amazon — they're affiliate links and I earn a small commission at no cost to you. <span style="font-weight:700;color:var(--clr-caramel);">WORTH THE HUNT</span> buttons go to my sister site <a href="https://www.5best2buy.com" target="_blank" rel="noopener">5best2buy</a>, which hunts down small American makers — the premium tier, and nobody pays to be there. Buy once, cry once; or buy economy and bake tonight. Both are honorable.</p>
+
+  <div class="toc">
+    <strong style="font-family:var(--ff-display);color:var(--clr-walnut);">Jump to:</strong> &nbsp;
+    <a href="#bake">Bake &amp; Shape</a> · <a href="#roll">Roll &amp; Work</a> · <a href="#mix">Mix &amp; Knead</a> · <a href="#measure">Measure &amp; Temp</a> · <a href="#grind">Grind &amp; Prep</a> · <a href="#finish">Slice, Store &amp; Gift</a> · <a href="#keep">Keep &amp; Clean</a> · <a href="#ingredients">The Ingredient Shelf</a>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="bake">🍩 Bake &amp; Shape</h2>
+    <p class="kit-sub">The pan decides the bake — <a href="/guides/potica-pan.html">the potičnik guide explains why</a>.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Tube / kugelhopf pan (the potičnik stand-in)</div><div class="kit-why">The closest thing to the traditional pan: ring shape, central cone, even bake.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=potica+kugelhopf+tube+pan&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bundt pan (simple pattern)</div><div class="kit-why">Works beautifully — pick plain flutes, not intricate ones, and grease everything.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=bundt+pan+simple+12+cup&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Angel food / two-piece tube pan</div><div class="kit-why">Plain walls release a heavy enriched loaf more forgivingly than any fluted pan.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=angel+food+cake+tube+pan+two+piece&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Loaf pan, 9×5 (the diaspora standard)</div><div class="kit-why">How most American potica has been baked for a century.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=9x5+loaf+pan+heavy+gauge&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Loaf pan set (bake two at once)</div><div class="kit-why">The classic recipe halves into two standard tins — one to keep, one to give.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=loaf+pan+set+of+2+nonstick&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Mini loaf pans</div><div class="kit-why">Gift-size poticas — the church-sale format.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=mini+loaf+pan+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Baking sheet set</div><div class="kit-why">For free-form coiled poticas and toasting the walnuts.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=half+sheet+baking+pan+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Cooling rack</div><div class="kit-why">Cooling fully before slicing is a rule, not a suggestion — this is where it happens.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=wire+cooling+rack+stainless&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="roll">🥖 Roll &amp; Work</h2>
+    <p class="kit-sub">The roll is the skill — <a href="/guides/how-to-roll-potica.html">the rolling guide</a> shows what these are for.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">French tapered rolling pin</div><div class="kit-why">Feel and control for thin dough; the pin most bakers end up loyal to.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=french+rolling+pin+tapered&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Classic rolling pin with handles</div><div class="kit-why">Weight does the work on the first passes of a stiff dough.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=wooden+rolling+pin+with+handles&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Rolling pin thickness rings</div><div class="kit-why">Rubber bands for consistency — a 3&nbsp;mm guarantee on every pass.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=rolling+pin+thickness+rings+guides&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Pastry cloth (large)</div><div class="kit-why">The traditional surface — stops sticking and lifts the dough into the roll for you.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=large+pastry+cloth+canvas&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Silicone pastry mat with measurements</div><div class="kit-why">The modern cloth — printed guides tell you when the rectangle hits 50×35&nbsp;cm.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=silicone+pastry+mat+with+measurements+extra+large&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Marble pastry board</div><div class="kit-why">Stays cool, resists sticking — the luxury the dough notices.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=marble+pastry+board&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bench scraper (stainless)</div><div class="kit-why">Divides dough, lifts dough, cleans the counter — the most-used tool in bread baking.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=stainless+bench+scraper+dough&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Flexible bowl scrapers</div><div class="kit-why">Gets every gram of filling out of the bowl and onto the dough.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=flexible+bowl+scraper+dough&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Pastry brush set</div><div class="kit-why">Egg wash on, excess flour off.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=pastry+brush+set+natural+bristle&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="mix">🌀 Mix &amp; Knead</h2>
+    <p class="kit-sub">What "smooth and elastic" takes — <a href="/guides/potica-dough.html">the dough guide</a> has the windowpane test.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Stand mixer with dough hook</div><div class="kit-why">Ten minutes of hand-kneading becomes six of supervision.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=stand+mixer+dough+hook&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Hand mixer</div><div class="kit-why">For the filling: creaming butter, whipping the egg whites to stiff peaks.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=electric+hand+mixer+5+speed&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bread machine (dough cycle)</div><div class="kit-why">Heresy? Maybe. But its dough cycle kneads and proves enriched dough flawlessly while you grind walnuts.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=bread+machine+dough+cycle&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Danish dough whisk</div><div class="kit-why">Brings shaggy dough together faster than a spoon, cleaner than hands.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=danish+dough+whisk&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Stainless mixing bowl set</div><div class="kit-why">Dough in the big one, filling in the middle one, egg whites in the small one.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=stainless+steel+mixing+bowl+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Glass mixing bowls with lids</div><div class="kit-why">Watch the dough double instead of guessing.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=glass+mixing+bowls+with+lids+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Dough rising bucket (marked)</div><div class="kit-why">Volume markings turn "has it doubled?" into a reading, not a debate.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=dough+rising+bucket+container+marked&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Wooden spoon set</div><div class="kit-why">The filling wants slow, warm stirring. Grandmother technology, unimproved since 1575.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=wooden+spoon+set+baking&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Silicone spatula set</div><div class="kit-why">Folding stiff egg whites into walnut filling without deflating them.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=silicone+spatula+set+heat+resistant&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="measure">🌡️ Measure &amp; Temp</h2>
+    <p class="kit-sub">Potica is done at ~90&nbsp;°C inside, and yeast dies above ~45&nbsp;°C — numbers beat vibes.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Digital kitchen scale (grams)</div><div class="kit-why">The single most important tool on this page. 500&nbsp;g of flour is not "about 4 cups."</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=digital+kitchen+scale+grams&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Instant-read thermometer</div><div class="kit-why">Milk at 37&nbsp;°C, loaf at 90&nbsp;°C — ends both arguments instantly.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=instant+read+meat+thermometer+digital&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Oven thermometer</div><div class="kit-why">Most home ovens lie by 10–20 degrees. A cracked top is often just a hot oven.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=oven+thermometer+hanging&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Measuring spoons (narrow)</div><div class="kit-why">For the yeast, salt, cinnamon, and clove — narrow ones fit spice jars.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=stainless+measuring+spoons+narrow&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Measuring cups (liquid)</div><div class="kit-why">Warm milk by the millilitre.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=glass+liquid+measuring+cup+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Folding bread proofer</div><div class="kit-why">A warm, humidity-controlled box — the Iron Range grandmothers heated the whole house; this heats one cubic foot.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=folding+bread+proofer+box&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="grind">⚙️ Grind &amp; Prep</h2>
+    <p class="kit-sub">Texture is everything — <a href="/guides/grinding-walnuts-for-potica.html">walnuts</a> and <a href="/guides/poppy-seed-potica.html">poppy seeds</a> each have a guide.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Hand-crank nut grinder / mill</div><div class="kit-why">The traditional tool and still the best: shears the nut dry instead of crushing it oily.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=hand+crank+nut+grinder+mill&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Rotary drum grater</div><div class="kit-why">Same shearing action, smaller footprint, excellent budget stand-in.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=rotary+drum+grater+nuts+cheese&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Food processor</div><div class="kit-why">Works if you pulse in batches — the guide explains the walnut-butter trap.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=food+processor+8+cup&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Spice / poppy seed grinder</div><div class="kit-why">Whole poppy seeds taste like almost nothing — this is the makova potica unlock.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=electric+spice+grinder+poppy+seed&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Microplane zester</div><div class="kit-why">Lemon zest in the dough, orange zest in the poppy filling.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=microplane+zester+grater&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="finish">🔪 Slice, Store &amp; Gift</h2>
+    <p class="kit-sub">Day two is the best day — <a href="/guides/storing-potica.html">the storing guide</a> — and potica has always been a gifted food.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Serrated bread knife</div><div class="kit-why">Clean spiral slices instead of compressed smears.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=serrated+bread+knife+10+inch&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bread slicing guide</div><div class="kit-why">Even thin slices, sixteen out of sixteen.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=bread+slicing+guide&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Parchment paper</div><div class="kit-why">Lines the tin, wraps the gift.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=parchment+paper+sheets+baking&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bread box / storage container</div><div class="kit-why">Room temperature, wrapped, up to a week — never the refrigerator.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=bread+box+storage+container&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bread gift bags</div><div class="kit-why">The unspoken rule: if you bring a potica, you made it. Bag it like you mean it.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=bread+loaf+gift+bags+window&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Cake boards</div><div class="kit-why">A sturdy base for gifting or shipping a whole loaf.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=rectangle+cake+boards&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Flour sifter / sugar duster</div><div class="kit-why">The optional snowfall of powdered sugar on the finished spiral.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=powdered+sugar+duster+sifter&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="keep">🧽 Keep &amp; Clean</h2>
+    <p class="kit-sub">The unglamorous half of every great bake.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Flour sack towels</div><div class="kit-why">Cover the proving bowl, line the basket — and in a pinch, they ARE the rolling cloth.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=flour+sack+towels+cotton&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Airtight flour containers</div><div class="kit-why">Bulk flour stays fresh; bulk walnuts live in the freezer instead.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=airtight+flour+storage+container+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Oven mitts (long)</div><div class="kit-why">A 2&nbsp;kg loaf in a metal tube pan holds heat like a engine block.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=long+oven+mitts+heat+resistant&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Apron</div><div class="kit-why">Flour reaches places physics cannot explain.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=baking+apron+cotton+pockets&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Pan scraper set</div><div class="kit-why">Baked-on honey filling surrenders to plastic scrapers, not steel wool.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=pan+scraper+plastic+set&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Dish brush set</div><div class="kit-why">The bundt pan's flutes demand a brush with opinions.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=dish+brush+set+bottle+detail&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+  </div>
+
+  <div class="kit-section">
+    <h2 id="ingredients">🌾 The Ingredient Shelf</h2>
+    <p class="kit-sub">Where a maker shelf exists on 5best2buy, the gold button is the good stuff. More shelves are being hunted.</p>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Walnuts (bulk)</div><div class="kit-why">500&nbsp;g per loaf — <a href="/guides/grinding-walnuts-for-potica.html">taste before you commit</a>. Freezer-store.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=whole+walnuts+bulk+5+lb&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Raw honey</div><div class="kit-why">Binds and sweetens the classic filling — a varietal honey earns its keep here.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=raw+wildflower+honey&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a><a class="btn-wth" href="https://www.5best2buy.com/hunt/raw-honey/" target="_blank" rel="noopener">Worth The Hunt →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Bread flour</div><div class="kit-why">Higher protein = the strength to roll thin without tearing.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=bread+flour+high+protein&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a><a class="btn-wth" href="https://www.5best2buy.com/hunt/rice/" target="_blank" rel="noopener">Heritage Millers →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Poppy seeds (bulk)</div><div class="kit-why">For makova potica — buy fresh, grind them, always.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=poppy+seeds+bulk+1+lb&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Instant yeast</div><div class="kit-why">A pound of SAF costs what six sachets do and keeps for a year in the freezer.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=SAF+instant+yeast+1+lb&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Raisins (unsulphured)</div><div class="kit-why">For the walnut-raisin filling — soak them in the rum first.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=unsulphured+raisins+organic&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a><a class="btn-wth" href="https://www.5best2buy.com/hunt/dried-fruit/" target="_blank" rel="noopener">Worth The Hunt →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Ceylon cinnamon</div><div class="kit-why">Softer and more floral than the grocery-jar cassia.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=ceylon+cinnamon+ground&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Vanilla extract</div><div class="kit-why">A teaspoon in the poppy filling; real extract, not flavoring.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=pure+vanilla+extract&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">Fine sea salt</div><div class="kit-why">Cleaner than iodized in an enriched dough.</div></div><div class="kit-links"><a class="btn-econ" href="https://www.amazon.com/s?k=fine+sea+salt+baking&tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Economy →</a><a class="btn-wth" href="https://www.5best2buy.com/hunt/finishing-salt/" target="_blank" rel="noopener">Worth The Hunt →</a></div></div>
+    <div class="kit-item"><div class="kit-info"><div class="kit-name">The full sourcing edition</div><div class="kit-why">The whole recipe with a hunted maker beside every ingredient that matters — on the sister site.</div></div><div class="kit-links"><a class="btn-wth" href="https://www.5best2buy.com/recipes/potica/" target="_blank" rel="noopener">Recipe No.01 →</a></div></div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  © 2026 Poticas.com — All rights reserved. &nbsp;|&nbsp;
+  <a href="/privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+  <a href="/terms.html">Terms of Service</a> &nbsp;|&nbsp;
+  <a href="/">← Poticas.com</a>
+</footer>
+
+</body>
+</html>

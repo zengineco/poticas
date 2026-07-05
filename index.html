@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.6.2
+// Version:     v3.7.0
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,13 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.7.0 (2026-07-04):
+//   - POTS & PANS: /kitchen.html — 60-item equipment + ingredient catalog in 8
+//     task categories. Two labeled tiers: ECONOMY (Amazon search links,
+//     tag=5best2buy-20, rel=sponsored) + WORTH THE HUNT (5best2buy live maker
+//     shelves: honey, salt, dried fruit, heritage millers + Recipe No.01).
+//     Shop-section teaser pill + footer link. Sitemap 21 -> 22 URLs.
 //
 // CHANGE LOG v3.6.2 (2026-07-04):
 //   - Voice pass (owner call: independently run, no "we"): shop copy first person
@@ -837,6 +844,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
     </div>
 
+    <!-- Pots & Pans teaser -->
+    <div class="reveal" style="text-align:center;margin:34px 0 10px;">
+      <a href="/kitchen.html" style="display:inline-block;background:rgba(253,246,233,0.09);border:1.5px solid rgba(201,146,42,0.55);border-radius:999px;padding:13px 30px;font-family:var(--ff-accent);font-size:1rem;font-weight:600;letter-spacing:0.05em;color:var(--clr-gold);">🍳 The Whole Potica Kitchen — every pot, pan &amp; tool, listed →</a>
+    </div>
+
     <!-- Waitlist -->
     <div class="shop-notify-wrap reveal">
       <p style="font-family:var(--ff-accent);font-style:italic;color:rgba(253,246,233,0.6);margin-bottom:20px;font-size:0.95rem;">
@@ -873,6 +885,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <ul>
           <li><a href="#shop">Order Potica</a></li>
           <li><a href="#shop">Baker's Pantry</a></li>
+          <li><a href="/kitchen.html">Pots &amp; Pans</a></li>
           <li><a href="/about.html">About This Site &amp; Standards</a></li>
           <li><a href="/privacy.html">Privacy Policy</a></li>
           <li><a href="/terms.html">Terms of Service</a></li>
