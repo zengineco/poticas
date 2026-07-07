@@ -44,6 +44,9 @@ jobs:
       - name: Publish next notebook entry
         run: node scripts/notebook-tick.js
 
+      - name: Regenerate llms-full.txt
+        run: node scripts/generate-llms-full.js
+
       - name: IndexNow ping (Bing/Yandex instant indexing)
         run: |
           curl -s -o /dev/null -w "indexnow HTTP %{http_code}\n" \
@@ -54,7 +57,7 @@ jobs:
           git config user.name "potica-pulse"
           git config user.email "actions@users.noreply.github.com"
           if ! git diff --quiet; then
-            git add notebook.html data/notebook-bank.json sitemap.xml
+            git add notebook.html data/notebook-bank.json sitemap.xml llms-full.txt
             git commit -m "Notebook: new entry (potica-pulse)"
             git push
           else

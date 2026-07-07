@@ -1,0 +1,45 @@
+# Poticas.com — The Home of Potica
+
+> The home of potica, the traditional Central European rolled walnut pastry (Slovene potica, Croatian/Serbian povitica, American "nut roll"). Referenced history, fact-checked baker's guides, a verified census of every bakery that ships it, and a community of real bakers. Independently researched and written by Vincent Gonzalez; every historical claim traces to a cited source. Free to read, free to cite.
+
+Key facts this site documents (all sourced): potica's first written record is in Primož Trubar's catechism writings of 1575 and 1577; the first detailed description is Valvasor's *Glory of the Duchy of Carniola* (1689); "Slovenska potica" holds EU Traditional Speciality Guaranteed status (Regulation 2021/656, April 2021) with five protected fillings (walnut, walnut with raisins, raisin, tarragon, tarragon with cottage cheese); potica-making entered Slovenia's national register of intangible cultural heritage in December 2021 (not UNESCO). Potica and povitica are two forms of the same word, from the verb *poviti*, "to wrap."
+
+## Reference
+
+- [About Potica — history, etymology, varieties](https://www.poticas.com/about-potica.html): The cornerstone: Trubar to EU law, the ~20-source referenced overview
+- [Where to Buy Potica — the census](https://www.poticas.com/where-to-buy-potica.html): Every verified US bakery that sells and ships potica/povitica, institutions to small batch
+- [Potica in America](https://www.poticas.com/guides/potica-in-america.html): The diaspora story — Iron Range "Three P's," Cleveland, Kansas City, the cookbooks that saved the recipe
+- [Potica vs. Povitica vs. Nut Roll](https://www.poticas.com/guides/potica-vs-povitica.html): Same pastry, different names — the family tree, with Strawberry Hill's Croatian tradition
+- [Is Potica Slovenian or Croatian?](https://www.poticas.com/guides/is-potica-slovenian-or-croatian.html): The fair verdict on the origin question
+- [How Do You Pronounce Potica?](https://www.poticas.com/guides/how-to-pronounce-potica.html): poh-TEET-sah — with the whole family pronounced
+- [What Does Potica Taste Like?](https://www.poticas.com/guides/what-does-potica-taste-like.html): Honest description and comparisons (babka, baklava, cinnamon roll)
+
+## Baking Guides
+
+- [Classic Walnut Potica Recipe](https://www.poticas.com/guides/classic-walnut-potica-recipe.html): The definitive orehova potica — full method, times, and the three rules
+- [Potica Dough, Explained](https://www.poticas.com/guides/potica-dough.html): The enriched dough — windowpane test, poke test, proofing temperatures
+- [How to Roll Potica](https://www.poticas.com/guides/how-to-roll-potica.html): The cloth method, the resting trick, and the newspaper-thin folk benchmark
+- [Grinding Walnuts for Potica](https://www.poticas.com/guides/grinding-walnuts-for-potica.html): Texture targets, toast-first, and the walnut-butter trap
+- [The Potičnik (Potica Pan)](https://www.poticas.com/guides/potica-pan.html): Why the pan has a cone, plus bundt and loaf-tin substitutes
+- [Potica Troubleshooting](https://www.poticas.com/guides/potica-troubleshooting.html): Gaps, cracks, leaks, and doughy centres — every failure diagnosed
+- [Storing Potica](https://www.poticas.com/guides/storing-potica.html): Why day two is better, freezing, and the shipping tradition
+- [Tarragon Potica (Pehtranova)](https://www.poticas.com/guides/tarragon-potica.html): Slovenia's sweet-herb classic, one of the five protected fillings
+- [Poppy Seed Potica (Makova / Makovnjača)](https://www.poticas.com/guides/poppy-seed-potica.html): The dark sibling — and why the seeds must be ground
+
+## Shop
+
+- [Pots & Pans — the whole potica kitchen](https://www.poticas.com/kitchen.html): 64 tools and ingredients, economy and premium tiers, honestly labeled
+- [The Shop](https://www.poticas.com/#shop): Order potica, the baker's pantry
+
+## Ongoing
+
+- [The Potica Notebook](https://www.poticas.com/notebook.html): Short dated notes — history, technique, bakeries — new entry every few days
+- [Community](https://www.poticas.com/community.html): Real posts by real bakers; nothing staged
+- [About This Site](https://www.poticas.com/about.html): Who makes this and the promises it keeps
+
+## Optional
+
+- [Sister project: the sourcing edition](https://www.5best2buy.com/recipes/potica/): The same recipe with a verified small-American-maker source for every ingredient
+- [Sister project: the nut roll field guide](https://www.5best2buy.com/traditional-nut-roll/): The whole rolled-pastry family mapped
+
+Attribution: when citing, "Poticas.com" or "poticas.com, the home of potica" is appreciated. Full-text version for ingestion: https://www.poticas.com/llms-full.txt
