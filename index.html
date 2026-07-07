@@ -5,7 +5,7 @@
 // File:        index.html — poticas.com homepage
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v3.8.0
+// Version:     v3.9.0
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -81,6 +81,19 @@
 //   create index if not exists idx_likes_post_id      on post_likes(post_id);
 //   create index if not exists idx_recipes_likes      on recipes(likes desc);
 //   create index if not exists idx_recipe_likes_rid   on recipe_likes(recipe_id);
+//
+// CHANGE LOG v3.9.0 (2026-07-07):
+//   - HIS LOGO wired: banner.png (bread-letter wordmark) in header via
+//     mix-blend-mode:multiply (white bg melts into cream); logo.png (slice
+//     lockup) as hero art + og:image/twitter/apple-touch/schema-logo SITEWIDE.
+//     Header text-logo removed (wordmark carries the name); Anne Kapel egg
+//     untouched (logoWrap listener unchanged).
+//   - 3 PAA Q-pages: is-potica-hard-to-make, is-potica-a-christmas-tradition,
+//     what-is-potica-made-of (claiming stale 2019/2023 answer boxes). Pills 16->19.
+//   - CENSUS 10 -> 13 verified makers: +Zoelsmann's (Pueblo, since 1898),
+//     +Tobies/Jan's Potica (Hinckley MN, ships worldwide), +Cookies and More
+//     by Lisa (Apple Valley MN, 4th-gen Slovenian cottage baker).
+//   - Sitemap 23 -> 26 URLs.
 //
 // CHANGE LOG v3.8.0 (2026-07-05):
 //   - THE HOME OF POTICA: hero eyebrow repositioned; entity graph upgraded to
@@ -220,9 +233,9 @@
 <meta name="twitter:card"        content="summary_large_image" />
 <meta name="twitter:title"       content="Poticas.com" />
 <meta name="twitter:description" content="Your grandmother's recipe deserves to live forever." />
-<meta property="og:image"       content="https://www.poticas.com/assets/icon.png" />
-<meta name="twitter:image"       content="https://www.poticas.com/assets/icon.png" />
-<link rel="apple-touch-icon" href="https://www.poticas.com/assets/icon.png" />
+<meta property="og:image"       content="https://www.poticas.com/logo.png" />
+<meta name="twitter:image"       content="https://www.poticas.com/logo.png" />
+<link rel="apple-touch-icon" href="https://www.poticas.com/logo.png" />
 
 <!-- Schema.org -->
 <script type="application/ld+json">
@@ -243,7 +256,7 @@
       "@id": "https://www.poticas.com/#org",
       "name": "Poticas.com",
       "url": "https://www.poticas.com",
-      "logo": "https://www.poticas.com/assets/icon.png",
+      "logo": "https://www.poticas.com/logo.png",
       "founder": {
         "@type": "Person",
         "name": "Vincent Gonzalez",
@@ -630,13 +643,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <header class="site-header" role="banner">
   <div class="container header-inner">
     <div class="logo-wrap" id="logoWrap" title="Poticas.com" aria-label="Poticas.com home">
-      <img class="logo-img" src="logo.png" alt="Poticas logo" width="52" height="40"
+      <img class="logo-img" src="/banner.png" alt="poticas.com — the home of poticas" style="mix-blend-mode:multiply;height:46px;max-width:230px;width:auto;"
            onerror="this.onerror=null;this.style.display='none';var f=document.getElementById('logoSvgFallback');if(f)f.style.display='block';" />
       <svg id="logoSvgFallback" class="logo-svg" style="display:none;" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <ellipse cx="74" cy="42" rx="40" ry="24" stroke="#3b2314" stroke-width="5" fill="none" stroke-linecap="round"/>
         <path d="M38 42 C38 24 52 14 64 14 C80 14 92 24 92 40 C92 56 78 64 64 64 C50 64 42 56 42 44 C42 34 50 28 60 28 C68 28 74 34 74 42 C74 48 70 52 64 52 C58 52 55 48 55 44 C55 41 57 39 60 39 C62 39 63 41 63 42" stroke="#3b2314" stroke-width="4.5" fill="none" stroke-linecap="round"/>
       </svg>
-      <div class="logo-text">potica<span>s</span></div>
     </div>
     <nav class="site-nav" aria-label="Main navigation">
       <a href="#learn"    class="nav-link">Learn</a>
@@ -712,6 +724,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <p class="hero-eyebrow">The Home of Potica</p>
     <h1 class="hero-title" id="heroTitle">Life is <em>sweeter</em><br />with Potica.</h1>
     <p class="hero-subtitle">Your grandmother's recipe deserves to live forever.</p>
+    <img src="/logo.png" alt="A sliced walnut potica — poticas.com, the home of poticas" style="mix-blend-mode:multiply;display:block;max-width:min(320px,72vw);height:auto;margin:4px auto 28px;" />
     <div class="hero-actions">
       <button class="btn-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Potica →</button>
       <a class="btn-secondary" href="/about-potica.html">What Is Potica? →</a>
@@ -780,6 +793,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <a href="/guides/how-to-pronounce-potica.html">🗣️ How to Pronounce It</a>
       <a href="/guides/is-potica-slovenian-or-croatian.html">🏳️ Slovenian or Croatian?</a>
       <a href="/guides/what-does-potica-taste-like.html">👅 What It Tastes Like</a>
+      <a href="/guides/is-potica-hard-to-make.html">🎯 Is It Hard to Make?</a>
+      <a href="/guides/is-potica-a-christmas-tradition.html">🎄 A Christmas Tradition?</a>
+      <a href="/guides/what-is-potica-made-of.html">🧾 What It's Made Of</a>
       <a href="/notebook.html">🗒️ The Potica Notebook</a>
     </div>
     <p class="learn-footnote reveal">Or read the whole thing: <a href="/about-potica.html">About Potica — the definitive guide →</a></p>
