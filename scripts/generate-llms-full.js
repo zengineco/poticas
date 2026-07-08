@@ -24,6 +24,7 @@ var PAGES = [
   { file: 'guides/is-potica-hard-to-make.html',        title: 'Is Potica Hard to Make?' },
   { file: 'guides/is-potica-a-christmas-tradition.html', title: 'Is Potica a Christmas Tradition?' },
   { file: 'guides/what-is-potica-made-of.html',        title: 'What Is Potica Made Of?' },
+  { file: 'guides/potica-varieties.html',              title: 'Potica Varieties' },
   { file: 'guides/classic-walnut-potica-recipe.html', title: 'Classic Walnut Potica Recipe' },
   { file: 'guides/potica-dough.html',                 title: 'Potica Dough, Explained' },
   { file: 'guides/how-to-roll-potica.html',           title: 'How to Roll Potica Dough' },
