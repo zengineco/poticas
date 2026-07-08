@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700">
+  <!-- poticas.com favicon — the spiral on walnut. -->
+  <rect width="700" height="700" rx="120" fill="#3b2314"/>
+  <path d="M350 350 m-240,0 a240,240 0 1,1 480,0 a200,200 0 1,0 -400,0 a160,160 0 1,1 320,0 a120,120 0 1,0 -240,0 a80,80 0 1,1 160,0 a40,40 0 1,0 -80,0" stroke="#fdf6e9" stroke-width="34" fill="none" stroke-linecap="round"/>
+</svg>
