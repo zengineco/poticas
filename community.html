@@ -5,7 +5,7 @@
 // File:        community.html — the Community tab of poticas.com
 // Brand:       Poticas.com
 // Author:      Vincent Gonzalez
-// Version:     v1.1.0 (2026-07-03: studio branding removed; HOUSE RECIPE featured card — walnut guide + 5best2buy sourcing edition — replaces empty state, auto-yields to real community recipes)
+// Version:     v1.2.0 (2026-07-08: ad code neutralized — user feed, not an ad surface (AdSense low-value mitigation); evergreen feed intro added)
 // Layout:      RESPONSIVE (mobile-first)
 // Browser:     MODERN-BROWSERS
 //
@@ -123,8 +123,8 @@
 -->
 <head>
 <!-- [000] HEAD -->
-<meta name="google-adsense-account" content="ca-pub-8826956454892311">
 <meta charset="UTF-8" />
+<meta name="robots" content="noindex, follow" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="The Poticas.com community — share your potica recipes, stories, and photos with bakers worldwide. Real bakers, real recipes, nothing staged." />
 <meta name="keywords" content="potica community, potica recipes, share potica recipe, potica bakers, slovenian potica, walnut potica, rolled pastry" />
@@ -787,7 +787,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <body>
 
 <!-- [001] GDPR BANNER -->
-<div class="gdpr-banner" id="gdprBanner" role="region" aria-label="Cookie consent">
+<div class="gdpr-banner hidden" id="gdprBanner" role="region" aria-label="Cookie consent" style="display:none;">
   <p class="gdpr-text">
     We use cookies to serve relevant ads and improve your experience. Google AdSense requires consent for personalized advertising. By clicking "Accept," you agree to our use of cookies as described in our <a href="/privacy.html">Privacy Policy</a>. You can decline and still use the site — ads may be less relevant.
   </p>
@@ -939,6 +939,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <div class="ornament reveal"><span class="ornament-inner">✦ Community ✦</span></div>
     <p class="section-label reveal">Fresh from the Oven</p>
     <h2 class="section-title reveal" id="feedTitle">What's Rolling Today</h2>
+    <p class="reveal" style="max-width:640px;margin:14px 0 4px;font-family:var(--ff-body);color:var(--clr-ink-muted);line-height:1.8;">This is the community feed — a place for real bakers to share their potica: the recipe that came down from a grandmother, the loaf that cracked and still tasted perfect, the spiral you're proud of. Nothing here is staged or seeded. Every post below comes from someone who actually rolled the dough. Sign in to add yours, or read the guides while the feed fills.</p>
     <br />
     <div class="feed-layout">
 
@@ -1218,15 +1219,10 @@ function handleGdpr(accepted) {
 }
 
 function loadAdSense() {
-  try {
-    if (document.querySelector('script[src*="pagead2.googlesyndication"]')) return;
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8826956454892311';
-    s.setAttribute('crossorigin','anonymous');
-    document.head.appendChild(s);
-    log('AdSense injected post-consent.');
-  } catch(e) { console.error('[Poticas] loadAdSense:', e); }
+  // DECISION: no ads on the community page. This is a live user feed, not an ad
+  // surface. Kept as a no-op so consent handlers still call cleanly. Ads run on
+  // the content pages (guides, about-potica, etc.), never here.
+  return;
 }
 
 // ===== SCROLL REVEAL =====
