@@ -226,6 +226,13 @@ a:hover{color:var(--clr-walnut);text-decoration:underline;}
 .site-footer a:hover{color:var(--clr-gold);}
 .footer-watermark{margin-top:6px;font-size:0.78rem;color:rgba(253,246,233,0.35);}
 @media(max-width:600px){.header-nav .hide-mobile{display:none;}.article-hero{padding:40px 20px 34px;}}
+.buy-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--clr-surface);border:1.5px solid var(--clr-gold);border-radius:12px;padding:18px 20px;margin:24px 0;}
+.buy-strip-lead{font-family:var(--ff-display);font-weight:700;color:var(--clr-walnut);margin:0;font-size:1rem;width:100%;}
+.buy-btn{display:inline-block;font-family:var(--ff-accent);font-size:0.88rem;font-weight:700;letter-spacing:0.03em;background:var(--clr-walnut);color:var(--clr-cream);border-radius:999px;padding:8px 16px;text-decoration:none;transition:background 0.2s;}
+.buy-btn:hover{background:var(--clr-caramel);color:var(--clr-cream);text-decoration:none;}
+.buy-btn-all{background:var(--clr-gold);color:var(--clr-walnut);}
+.buy-btn-all:hover{background:var(--clr-caramel);color:var(--clr-cream);}
+.buy-strip-note{font-family:var(--ff-accent);font-size:0.8rem;font-style:italic;color:var(--clr-ink-muted);margin:2px 0 0;width:100%;}
 </style>
 </head>
 <body>
@@ -272,6 +279,14 @@ a:hover{color:var(--clr-walnut);text-decoration:underline;}
         </tbody>
       </table>
     </div>
+    <div class="buy-strip">
+      <p class="buy-strip-lead">Shop the pans:</p>
+      <a class="buy-btn" href="https://www.amazon.com/s?k=potica+kugelhopf+tube+pan&amp;tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Tube / Potičnik-style pan →</a>
+      <a class="buy-btn" href="https://www.amazon.com/s?k=bundt+pan+simple+12+cup&amp;tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Bundt pan →</a>
+      <a class="buy-btn" href="https://www.amazon.com/s?k=9x5+loaf+pan+heavy+gauge&amp;tag=5best2buy-20" target="_blank" rel="sponsored noopener noreferrer nofollow">Loaf tin →</a>
+      <a class="buy-btn buy-btn-all" href="/kitchen.html">All pans &amp; potica tools →</a>
+      <p class="buy-strip-note">Amazon links are affiliate — they support the site at no cost to you.</p>
+    </div>
     <h2 id="sizing">Sizing &amp; Prep</h2>
     <ul>
       <li><strong>Capacity:</strong> the classic 500&nbsp;g-flour recipe fills a 22–24&nbsp;cm potičnik or bundt, or one large (roughly 30&nbsp;cm / 12&nbsp;in) loaf tin. Halve the recipe for two standard 21&nbsp;cm loaf tins.</li>
@@ -279,7 +294,7 @@ a:hover{color:var(--clr-walnut);text-decoration:underline;}
       <li><strong>Fill the pan two-thirds at most</strong> after shaping. The second prove plus oven spring closes the rest of the gap; an over-filled potičnik mushrooms over its own walls.</li>
       <li><strong>Seam placement:</strong> seam-down in a loaf tin; seam against the outer wall in a ring mould.</li>
     </ul>
-    <p>Ceramic potičniks are still made by Slovenian potteries and turn up from specialty importers; a good tube pan meanwhile costs little and bakes beautifully. Kitchen picks — scales, pans, rolling pins — live in the <a href="/#shop">Baker's Pantry</a>.</p>
+    <p>Ceramic potičniks are still made by Slovenian potteries and turn up from specialty importers; a good tube pan meanwhile costs little and bakes beautifully. Every pan, tool, and ingredient for potica — economy and premium, side by side — lives on the <a href="/kitchen.html">Pots &amp; Pans page</a>.</p>
 
     <h2 id="faq">Frequently Asked Questions</h2>
     <div class="faq-item">
@@ -305,7 +320,7 @@ a:hover{color:var(--clr-walnut);text-decoration:underline;}
       <li><a href="/guides/classic-walnut-potica-recipe.html">Walnut Potica Recipe</a></li>
       <li><a href="/guides/potica-troubleshooting.html">Troubleshooting</a></li>
       <li><a href="/about-potica.html#history">The Potičnik's History</a></li>
-      <li><a href="/#shop">Baker's Pantry (Shop)</a></li>
+      <li><a href="/kitchen.html">Pots &amp; Pans (Every Tool)</a></li>
     </ul>
   </div>
 
@@ -375,5 +390,23 @@ var poticasGdpr;
 })();
 </script>
 
+<script>
+// READS: gtag — fires outbound_click on affiliate/external links so revenue is measurable
+(function(){
+  try{
+    document.addEventListener("click", function(e){
+      var a = e.target && e.target.closest ? e.target.closest("a") : null;
+      if(!a || !a.href) return;
+      var host="";
+      try{ host = new URL(a.href, location.href).hostname; }catch(x){ return; }
+      var aff = /amazon\.com|5best2buy\.com|goldbelly|etsy\.com/i.test(a.href) || (a.rel && a.rel.indexOf("sponsored")>=0);
+      var external = host && host.indexOf("poticas.com") < 0 && host !== location.hostname;
+      if(typeof gtag==="function" && (aff || external)){
+        gtag("event","outbound_click",{ link_url:a.href, link_domain:host, affiliate:!!aff });
+      }
+    }, true);
+  }catch(err){ if(window.console) console.error("outbound_click:", err); }
+})();
+</script>
 </body>
 </html>

@@ -1264,6 +1264,7 @@ async function submitNotify() {
     emailEl.style.display   = 'none';
     notifyBtn.style.display = 'none';
     successEl.style.display = 'block';
+    try { if (typeof gtag === 'function') gtag('event', 'waitlist_signup', { location: 'poticas_kitchen' }); } catch(g) {}
   } catch(e) {
     console.error('[Poticas] submitNotify:', e);
     var nb = document.getElementById('notifyBtn');
@@ -1346,5 +1347,23 @@ log('Poticas.com v3.3.0 — booting.');
 log('Poticas.com v3.3.0 — ready.');
 </script>
 
+<script>
+// READS: gtag — fires outbound_click on affiliate/external links so revenue is measurable
+(function(){
+  try{
+    document.addEventListener("click", function(e){
+      var a = e.target && e.target.closest ? e.target.closest("a") : null;
+      if(!a || !a.href) return;
+      var host="";
+      try{ host = new URL(a.href, location.href).hostname; }catch(x){ return; }
+      var aff = /amazon\.com|5best2buy\.com|goldbelly|etsy\.com/i.test(a.href) || (a.rel && a.rel.indexOf("sponsored")>=0);
+      var external = host && host.indexOf("poticas.com") < 0 && host !== location.hostname;
+      if(typeof gtag==="function" && (aff || external)){
+        gtag("event","outbound_click",{ link_url:a.href, link_domain:host, affiliate:!!aff });
+      }
+    }, true);
+  }catch(err){ if(window.console) console.error("outbound_click:", err); }
+})();
+</script>
 </body>
 </html>

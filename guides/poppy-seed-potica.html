@@ -298,6 +298,7 @@ a:hover{color:var(--clr-walnut);text-decoration:underline;}
   <div class="related-guides">
     <h2>Keep Reading</h2>
     <ul class="related-list">
+      <li><a href="/kitchen.html">Pots &amp; Pans (Every Tool)</a></li>
       <li><a href="/guides/classic-walnut-potica-recipe.html">Walnut Potica Recipe</a></li>
       <li><a href="/guides/tarragon-potica.html">Tarragon Potica</a></li>
       <li><a href="/guides/how-to-roll-potica.html">Rolling Technique</a></li>
@@ -373,5 +374,23 @@ var poticasGdpr;
 })();
 </script>
 
+<script>
+// READS: gtag — fires outbound_click on affiliate/external links so revenue is measurable
+(function(){
+  try{
+    document.addEventListener("click", function(e){
+      var a = e.target && e.target.closest ? e.target.closest("a") : null;
+      if(!a || !a.href) return;
+      var host="";
+      try{ host = new URL(a.href, location.href).hostname; }catch(x){ return; }
+      var aff = /amazon\.com|5best2buy\.com|goldbelly|etsy\.com/i.test(a.href) || (a.rel && a.rel.indexOf("sponsored")>=0);
+      var external = host && host.indexOf("poticas.com") < 0 && host !== location.hostname;
+      if(typeof gtag==="function" && (aff || external)){
+        gtag("event","outbound_click",{ link_url:a.href, link_domain:host, affiliate:!!aff });
+      }
+    }, true);
+  }catch(err){ if(window.console) console.error("outbound_click:", err); }
+})();
+</script>
 </body>
 </html>
