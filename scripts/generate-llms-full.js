@@ -36,8 +36,12 @@ var PAGES = [
   { file: 'guides/poppy-seed-potica.html',            title: 'Poppy Seed Potica (Makova Potica)' },
   { file: 'guides/chocolate-potica.html',             title: 'Chocolate Potica' },
   { file: 'guides/honey-potica.html',                 title: 'Honey Potica (Medena Potica)' },
+  { file: 'guides/cheese-potica.html',                title: 'Cheese Potica (Skutna Potica)' },
+  { file: 'guides/apricot-potica.html',               title: 'Apricot Potica' },
   { file: 'guides/potica-nut-roll.html',              title: 'Is Potica a Nut Roll?' },
   { file: 'guides/povitica-recipe.html',              title: 'Povitica Recipe' },
+  { file: 'guides/how-long-does-potica-last.html',    title: 'How Long Does Potica Last?' },
+  { file: 'guides/potica-calories.html',              title: 'How Many Calories Are in Potica?' },
   { file: 'kitchen.html',               title: 'Pots & Pans — The Whole Potica Kitchen' },
   { file: 'notebook.html',              title: 'The Potica Notebook' },
   { file: 'about.html',                 title: 'About This Site' }
