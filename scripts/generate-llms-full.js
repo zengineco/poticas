@@ -42,6 +42,7 @@ var PAGES = [
   { file: 'guides/povitica-recipe.html',              title: 'Povitica Recipe' },
   { file: 'guides/how-long-does-potica-last.html',    title: 'How Long Does Potica Last?' },
   { file: 'guides/potica-calories.html',              title: 'How Many Calories Are in Potica?' },
+  { file: 'guides/potica-minnesota.html',             title: 'Potica in Minnesota (The Iron Range)' },
   { file: 'kitchen.html',               title: 'Pots & Pans — The Whole Potica Kitchen' },
   { file: 'notebook.html',              title: 'The Potica Notebook' },
   { file: 'about.html',                 title: 'About This Site' }
