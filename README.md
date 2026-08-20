@@ -1,4 +1,17 @@
-# Poticas.com
+```
+╔════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                            ║
+║                   ██████╗  ██████╗ ████████╗██╗ ██████╗ █████╗ ███████╗                    ║
+║                   ██╔══██╗██╔═══██╗╚══██╔══╝██║██╔════╝██╔══██╗██╔════╝                    ║
+║                   ██████╔╝██║   ██║   ██║   ██║██║     ███████║███████╗                    ║
+║                   ██╔═══╝ ██║   ██║   ██║   ██║██║     ██╔══██║╚════██║                    ║
+║                   ██║     ╚██████╔╝   ██║   ██║╚██████╗██║  ██║███████║                    ║
+║                   ╚═╝      ╚═════╝    ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝                    ║
+║                                                                                            ║
+║                the first community for the rolled pastry of Central Europe                 ║
+║                                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════════════════════╝
+```
 
 **The world's first community dedicated entirely to potica** — the ancient rolled pastry of Central Europe.
 
@@ -134,3 +147,30 @@ Custom domain: add `poticas.com` and `www.poticas.com` in Pages settings. SSL pr
 © 2026 Poticas.com. All rights reserved. Site design and codebase owned by Vincent Gonzalez / Zengine™.
 
 User-submitted content remains the property of the respective users, subject to the license granted in the Terms of Service.
+
+---
+
+```
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║      ███████╗      ██╗  ██╗███████╗██╗   ██╗███████╗       ║
+║      ██╔════╝      ██║ ██╔╝██╔════╝╚██╗ ██╔╝██╔════╝       ║
+║      █████╗  █████╗█████╔╝ █████╗   ╚████╔╝ ███████╗       ║
+║      ██╔══╝  ╚════╝██╔═██╗ ██╔══╝    ╚██╔╝  ╚════██║       ║
+║      ██║           ██║  ██╗███████╗   ██║   ███████║       ║
+║      ╚═╝           ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝       ║
+║                                                            ║
+║               ·   C  R  E  A  T  I  V  E   ·               ║
+║                                                            ║
+║          ────────────────────────────────────────          ║
+║                                                            ║
+║                      Vincent Gonzalez                      ║
+║                         f-keys.com                         ║
+║                 ORCID 0009-0005-3640-014X                  ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+```
+
+Part of [F-Keys](https://f-keys.com) — independent hardware, software
+and internet products. See the [working log](https://f-keys.com/log/)
+and [live status](https://f-keys.com/status/).
