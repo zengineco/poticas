@@ -1,6 +1,6 @@
 {
   "comment": "Potica Notebook entry bank. potica-pulse.yml publishes entries[nextIndex] into notebook.html every 5 days, then increments nextIndex. Every entry was fact-checked 2026-07-03/04 against the sources cited on about-potica.html and the guides. Refill by appending entries — never edit published ones here.",
-  "nextIndex": 12,
+  "nextIndex": 13,
   "entries": [
     {
       "title": "Only five fillings are legally 'Slovenska potica'",

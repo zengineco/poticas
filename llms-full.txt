@@ -1022,6 +1022,10 @@ Only the filling changes — the enriched dough and the thin tight roll are iden
 - Walnut Potica Recipe
 - Poppy Seed Potica
 - Tarragon Potica
+- Chocolate Potica
+- Honey Potica
+- Cheese Potica
+- Apricot Potica
 - Order Every Flavor — The Census
 - The Varieties in Context
 ## Sources
@@ -2632,6 +2636,9 @@ About Potica
 Poticas.com › The Notebook
 ## The Potica Notebook
 Short, dated notes from the world of potica — history, technique, bakeries, and traditions. A new entry every few days.
+21 August 2026
+## Whole poppy seeds taste like almost nothing
+They are sealed capsules — baked whole, they stay gritty and bland. Ground, they release their oils and become the dark, fragrant paste the pastry is named for. If a poppy seed roll ever disappointed you, this step was probably skipped. Poppy seed potica →
 16 August 2026
 ## The cookbook written for readers with no grandmother left to ask
 Woman's Glory — The Kitchen , published by the Slovenian Women's Union of America for its silver anniversary (1926–1951), was compiled — in editor Albina Novak's words — as an "instructor" for women who wished to make "dishes for which their mothers have always been famous." A survival document disguised as a cookbook. More →
